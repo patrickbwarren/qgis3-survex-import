@@ -1,0 +1,21 @@
+; Title: Dowbergill Passage upstream from 800 yds chamber
+
+; created 27/10/2015 by Patrick Warren (PBW) from an original by Steve Warren
+
+; This is the second half of Dowbergill Passage, surveyed 2009-15 by WRPC/RRCPC/CPC.
+
+*begin Dowbergill2
+*export dgp7.1
+*export dgp6.46
+
+*include dgp8a ; 121209	Dec 2 52
+*include dgp8b
+*include dgp7
+*include dgp6
+
+*equate dgp8a.1 dgp8b.1
+*equate dgp8a.5 dgp8b.5
+*equate dgp8a.18 dgp7.1
+*equate dgp7.43 dgp6.1
+
+*end Dowbergill2

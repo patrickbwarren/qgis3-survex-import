@@ -1,0 +1,22 @@
+; Title: Dowbergill Passage Dow Cave end to 800 yds chamber
+
+; created 27/10/2015 by Patrick Warren (PBW) from an original by Steve Warren
+
+; This is the first half of Dowbergill Passage, compilation of WRPC survey data 2003-4
+
+*begin Dowbergill1
+*export dgp1.1
+*export dgp5.16
+
+*include dgp1
+*include dgp2
+*include dgp3
+*include dgp4			
+*include dgp5
+
+*equate dgp1.27 dgp2.1
+*equate dgp2.26 dgp3.1
+*equate dgp3.22 dgp4.1
+*equate dgp4.19 dgp5.1
+
+*end Dowbergill1
