@@ -431,11 +431,7 @@ ogr2ogr -f "ESRI Shapefile" DowProv_centreline.shp DowProv.dxf \
 We take the opportunity here to add an SRS to match that used in the
 georeferenced survey data. The resulting shapefile can then be imported
 in QGIS, and this route \emph{does} preserve \zdimension\ (elevation)
-data. Thus, for example, one can run the
-\href{https://plugins.qgis.org/plugins/Qgis2threejs/}{Qgis2threejs}
-plugin with a suitable digital elevation model (DEM) raster to generate
-a three dimensional view with the cave features underneath the
-landscape.
+data. 
 
 Similarly the stations with labels (and elevations) can be extracted by
 running
@@ -445,11 +441,9 @@ ogr2ogr -f "ESRI Shapefile" DowProv_stations.shp DowProv.dxf \
   -where "Layer='Labels'" -a_srs EPSG:7405
 \end{verbatim}
 
-\subsubsection{QGIS survex import plugin}\label{import-using-qgis-plugin}
+\subsubsection{QGIS import plugins (preferred route)}\label{import-using-qgis-plugin}
 
-\emph{This is probably the preferred route now!}
-
-Features include:
+Features of these plugins include:
 \begin{itemize}
 \tightlist
 \item no dependencies, natively reads binary .3d files ;
@@ -464,8 +458,9 @@ More details and installation instructions can be
 found in the
 \href{https://github.com/patrickbwarren/qgis-survex-import}{QGIS2} and
 \href{https://github.com/patrickbwarren/qgis3-survex-import}{QGIS3}
-GitHub repositories.
-Additional import scripts can be found in subdirectories.
+plugin repositories.
+Additional import scripts can be found in \verb+extra+ in
+\href{https://github.com/patrickbwarren/qgis-survex-import}{QGIS2}.
 
 \subsection{Georeferencing images, maps, and old
 surveys}\label{georeferencing-images-maps-and-old-surveys}
@@ -493,6 +488,6 @@ These notes are licensed under a
 
 \subsubsection{Copyright}\label{copyright}
 
-Copyright \copyright\ (2017, 2018) Patrick B Warren.
+Copyright \copyright\ (2017--19) Patrick B Warren.
 
 \end{document}
