@@ -19,7 +19,7 @@ _Requires QGIS3 and
 * clone or download this repository and copy the `SurvexImport`
 directory into the QGIS3 python plugins directory...;
 
-* run QGIS and enable the plugin by going to 'Plugins &rarr; Manage and
+* run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
   Install Plugins...' and make sure the box next to 'Import .3d file'
   is checked.
 
@@ -39,7 +39,7 @@ window for the user to select a .3d file with a number of options:
     - as walls ;
     - as cross sections ;
     - as traverses, showing the centrelines used for above ;
-* Get CRS from .3d file, or inherit from QGIS project ;
+* Get CRS from .3d file, or inherit from QGIS3 project ;
 * Keep features from previous import(s) ;
 * Select a GeoPackage (.gpkg) file to save results (optional).
   
@@ -85,7 +85,7 @@ The STYLE field for legs is one of NORMAL, DIVING, CARTESIAN,
 CYLPOLAR, or NOSURVEY.
 
 The DATE fields are either the same, or represent a date
-range, in the standard QGIS format YYYY-MM-DD.
+range, in the standard QGIS3 format YYYY-MM-DD.
 
 If up / down data for passage polygons is requested, then the polygons have
 MEAN_UP and MEAN_DOWN attributes in addition to ELEVATION.  These are
@@ -95,23 +95,25 @@ leg.  They can be used in 3d work (see end).
 For the most part importing the CRS from the .3d file should work as
 expected if the survey data has been georeferenced using the survex
 `*cs` and `*cs out` commands.  If it doesn't work, or this information
-isn't present, one can instead inherit the CRS from the current QGIS
+isn't present, one can instead inherit the CRS from the current QGIS3
 project.  If neither of these options is selected, a CRS dialog box
 may appear for each layer, or a default CRS will be chosen
-automatically, depending on the system-wide QGIS settings.
+automatically, depending on the system-wide QGIS3 settings.
 To maximise the likelihood that CRS import from .3d file works as
 expected, use an EPSG code in the `*cs out` survex command rather than
 a PROJ.4 string.
 
+[_The following may not apply to QGIS3?_]
 There is one point to bear in mind regarding the _z_ dimension data.
-Because of the (current) limitations in QGIS for creating vector
-layers in memory, the layer type does not explicitly know that the
-features include _z_ dimensions.  To ensure the _z_ dimension data is
-correctly incorporated when saving layers by hand, in the 'Save as
-...'  dialog make sure that the geometry type is specified (ie 'Point'
-for stations, 'Polygon' for polygons, and 'LineString' for everything
-else) and the 'Include _z_ dimension' box is checked.  This is done
-automatically when saving to the GeoPackage file if requested.
+Because of the (current) limitations for creating vector layers in
+memory, the layer type does not explicitly
+know that the features include _z_ dimensions.  To ensure the _z_
+dimension data is correctly incorporated when saving layers by hand,
+in the 'Save as ...'  dialog make sure that the geometry type is
+specified (ie 'Point' for stations, 'Polygon' for polygons, and
+'LineString' for everything else) and the 'Include _z_ dimension' box
+is checked.  This is done automatically when saving to the GeoPackage
+file if requested.
 
 #### Passage walls
 
@@ -158,7 +160,7 @@ reality may be pure coincidence: if in doubt, use splays!
 
 ### What to do next
 
-Once the data is in QGIS one can do various things with it.
+Once the data is in QGIS3 one can do various things with it.
 
 For example, features (stations, legs, polygons) can be coloured
 by elevation to mimic the behaviour of the `aven` viewer in survex
@@ -218,7 +220,7 @@ Three dimensional views can be made with the Qgis2threejs plugin,
 usually in combination with a DEM [_or directly in QGIS3?_].  To
 render features in 3d _either_ use the ELEVATION attribute to set the
 absolute height, _or_ (better) save the imported data to a shapefile
-(eg as a GeoPackage) and re-import so that QGIS knows about the _z_
+(eg as a GeoPackage) and re-import so that QGIS3 knows about the _z_
 dimension data and can pass it on to the plugin to inform the
 rendering [_check what happens with QGIS3_].  Passage 'tubes' like
 those in aven can be approximately rendered using polygons, with the
