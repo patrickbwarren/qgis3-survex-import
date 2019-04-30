@@ -11,6 +11,6 @@ Note that the `.svx` files have
 so on Windows you might have to use something like
 [Notepad++](https://notepad-plus-plus.org/ "Notepad++")
 to look at them.  The processed data is [`DowProv.3d`](DowProv.3d), generated using
-survex 1.2.32.
+survex 1.2.37.
 
 For more details see [`cave_surveying_and_GIS.pdf`](../cave_surveying_and_GIS.pdf) in the top level directory.
