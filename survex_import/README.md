@@ -1,4 +1,12 @@
-# Extra python scripts
+# Plugin development directory
+
+This is where all code development should be done.
+
+Run `pb_tool deploy` to move everything to `..\SurvexImport`.  The
+contents of this can then be copied to the GIS3 python plugin
+directory.
+
+### Extra python scripts
 
 * `dump3d.py` replicates _exactly_ the functionality of the survex
   `dump3d` command in pure python, for debugging.
