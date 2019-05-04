@@ -16,16 +16,29 @@ _Requires QGIS3 and
 
 ### Installation
 
-* clone or download this repository and copy the `SurvexImport`
-directory into the QGIS3 python plugins directory...;
+To install the plugin:
 
+* clone or download this repository ;
+* copy the `SurvexImport` directory to where the QGIS3 python3 plugins
+  should be installed (see below), OR under unix run `make install` in the
+  cloned directory ;
 * run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
   Install Plugins...' and make sure the box next to 'Import .3d file'
-  is checked.
+  is checked, in the 'Installed' tab.
 
 When installed, a menu item 'Import .3d file' should appear on the
 'Vector' drop-down menu in the main QGIS3 window, and (possibly) a
 .3d icon in a toolbar (if enabled).
+
+Under unix (linux) the plugin directory is something like
+```
+~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+```
+
+Note that the `SurvexImport` directory in the repository is
+automatically populated by running `pb_tool deploy` in the
+`..\survex_import` directory.  Make all edits in that directory; any
+changes or additions made in `SurvexImport` will be overwritten!
 
 ### Usage
 

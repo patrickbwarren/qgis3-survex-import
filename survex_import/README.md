@@ -1,10 +1,10 @@
 # Plugin development directory
 
-This is where all code development should be done.
-
-Run `pb_tool deploy` to move everything to `..\SurvexImport`.  The
-contents of this can then be copied to the GIS3 python plugin
-directory.
+This is where all code development should be done.  Run `pb_tool
+deploy` to deploy into `..\SurvexImport`.  The contents of that
+directory can then be copied to the QGIS3 python plugin directory.
+This can either be done by hand or by running `make install` in the
+top level directory.
 
 ### Extra python scripts
 
