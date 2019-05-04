@@ -20,8 +20,7 @@ To install the plugin:
 
 * clone or download this repository ;
 * copy the `SurvexImport` directory to where the QGIS3 python3 plugins
-  should be installed (see below), OR under unix run `make install` in the
-  cloned directory ;
+  should be installed (see below), OR under unix run `make install` ;
 * run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
   Install Plugins...' and make sure the box next to 'Import .3d file'
   is checked, in the 'Installed' tab.
