@@ -1,14 +1,19 @@
+PLUGIN = survex_import
 QGIS3_PROFILE = ~/.local/share/QGIS/QGIS3/profiles/default
-QGIS3_PYTHON3_PLUGIN_SPACE = $(QGIS3_PROFILE)/python/plugins
-SURVEX_IMPORT_PLUGIN = $(QGIS3_PYTHON3_PLUGIN_SPACE)/SurvexImport
+QGIS3_PYTHON_PLUGINS = $(QGIS3_PROFILE)/python/plugins
+QGIS3_SURVEX_PLUGIN = $(QGIS3_PYTHON_PLUGINS)/$(PLUGIN)
 
-SURVEX_IMPORT_SOURCE = ./SurvexImport
+SOURCE = ./src
+DEPLOY = ./$(PLUGIN)
 
-default: install
+default: build install
+
+build:
+	cd src; yes | pb_tool deploy
 
 install:
-	mkdir -p $(SURVEX_IMPORT_PLUGIN)
-	cp -v $(SURVEX_IMPORT_SOURCE)/icon.png $(SURVEX_IMPORT_PLUGIN)
-	cp -v $(SURVEX_IMPORT_SOURCE)/metadata.txt $(SURVEX_IMPORT_PLUGIN)
-	cp -v $(SURVEX_IMPORT_SOURCE)/*.py $(SURVEX_IMPORT_PLUGIN)
-	cp -v $(SURVEX_IMPORT_SOURCE)/*.ui $(SURVEX_IMPORT_PLUGIN)
+	mkdir -p $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(SOURCE)/icon.png $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(SOURCE)/metadata.txt $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(SOURCE)/*.py $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(SOURCE)/*.ui $(QGIS3_SURVEX_PLUGIN)
