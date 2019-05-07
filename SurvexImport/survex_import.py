@@ -23,7 +23,7 @@
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtWidgets import QAction, QFileDialog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -97,20 +97,6 @@ class SurvexImport:
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Import .3d file')
-
-        self.dlg = SurvexImportDialog()
-        
-        self.dlg.selectedFile.clear()
-        self.dlg.fileSelector.clicked.connect(self.select_3d_file)
-        
-        self.dlg.selectedGPKG.clear()
-        self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
-
-        self.dlg.CRSFromProject.setChecked(False)
-        self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
-
-        self.dlg.CRSFromFile.setChecked(False)
-        self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -241,14 +227,14 @@ class SurvexImport:
 
     def select_3d_file(self):
         """Select 3d file"""
-        file_3d = QFileDialog.getOpenFileName(self.dlg, "Select .3d file ", self.path_3d, '*.3d')
+        file_3d, _filter_3d = QFileDialog.getOpenFileName(self.dlg, "Select .3d file ", self.path_3d, '*.3d')
         self.dlg.selectedFile.setText(file_3d)
         self.path_3d = QFileInfo(file_3d).path() # memorise path selection
 
     def select_gpkg(self):
         """Select GeoPackage (.gpkg)"""
-        file_gpkg = QFileDialog.getSaveFileName(self.dlg, "Enter or select existing .gpkg file ",
-                                                self.path_gpkg, '*.gpkg')
+        file_gpkg, _filter_gpkg = QFileDialog.getSaveFileName(self.dlg, "Enter or select existing .gpkg file ",
+                                                              self.path_gpkg, '*.gpkg')
         self.dlg.selectedGPKG.setText(file_gpkg)
         self.path_gpkg = QFileInfo(file_gpkg).path() # memorise path selection
 
@@ -261,6 +247,18 @@ class SurvexImport:
         if self.first_start == True:
             self.first_start = False
             self.dlg = SurvexImportDialog()
+        
+            self.dlg.selectedFile.clear()
+            self.dlg.fileSelector.clicked.connect(self.select_3d_file)
+        
+            self.dlg.selectedGPKG.clear()
+            self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
+
+            self.dlg.CRSFromProject.setChecked(False)
+            self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
+
+            self.dlg.CRSFromFile.setChecked(False)
+            self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
 
         # show the dialog
         self.dlg.show()
