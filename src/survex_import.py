@@ -22,15 +22,25 @@
  ***************************************************************************/
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt5.QtCore import QFileInfo, QDate
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QFileDialog
+
+from qgis.core import Qgis
+from qgis.core import QgsMessageLog, QgsProject
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
 from .survex_import_dialog import SurvexImportDialog
-import os.path
 
+from struct import unpack # from binary, read from .3d file
+from re import search # for matching and extracting substrings
+from math import log10, floor, sqrt
+
+import os # used for file system operations
+
+from osgeo import osr # spatial reference system API
 
 class SurvexImport:
     """QGIS Plugin Implementation."""
@@ -214,7 +224,6 @@ class SurvexImport:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
     def crs_from_file(self):
         """Enforce consistent CRS selector state"""
         if self.dlg.CRSFromFile.isChecked():
@@ -238,6 +247,53 @@ class SurvexImport:
         self.dlg.selectedGPKG.setText(file_gpkg)
         self.path_gpkg = QFileInfo(file_gpkg).path() # memorise path selection
 
+    # First try to extract an explicit EPSG number, otherwise try
+    # assuming the string is PROJ.4.  The reason for this somewhat
+    # convoluted route is to ensure if there is an EPSG number in the
+    # passed string, it is returned 'as is' and not transmuted into
+    # another EPSG number with ostensibly the same CRS.
+
+    def extract_epsg(self, s):
+        """Extract EPSG number from string"""
+        srs = osr.SpatialReference()
+        match = search('epsg:([0-9]*)', s)
+        if match:
+            return_code = srs.ImportFromEPSG(int(match.group(1)))
+        else:
+            return_code = srs.ImportFromProj4(s)
+        if return_code:
+            raise Exception("Invalid proj4 string: " + s)
+        code = srs.GetAttrValue('AUTHORITY', 1)
+        srs = None
+        self.epsg = int(code)
+        msg = "%s --> EPSG:%i" % (s, self.epsg)
+        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+
+# The next two routines are to do with reading .3d binary file format
+        
+    def read_xyz(self, fp):
+        """Read xyz as integers, according to .3d spec""" 
+        return unpack('<iii', fp.read(12))
+        
+    def read_len(self, fp):
+        """Read a number as a length according to .3d spec"""
+        byte = ord(fp.read(1))
+        if byte != 0xff:
+            return byte
+        else:
+            return unpack('<I', fp.read(4))[0]
+
+    def read_label(self, fp, current_label):
+        """Read a string as a label, or part thereof, according to .3d spec"""
+        byte = ord(fp.read(1))
+        if byte != 0x00:
+            ndel = byte >> 4
+            nadd = byte & 0x0f
+        else:
+            ndel = self.read_len(fp)
+            nadd = self.read_len(fp)
+        oldlen = len(current_label)
+        return current_label[:oldlen - ndel] + fp.read(nadd).decode('ascii')
 
     def run(self):
         """Run method that performs all the real work"""
@@ -269,7 +325,7 @@ class SurvexImport:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
 
-            survex3dfile = self.dlg.selectedFile.text()
+            survex_3d = self.dlg.selectedFile.text()
             gpkg_file = self.dlg.selectedGPKG.text()
 
             include_legs = self.dlg.Legs.isChecked()
@@ -292,4 +348,175 @@ class SurvexImport:
             
             get_crs_from_file = self.dlg.CRSFromFile.isChecked()
             get_crs_from_project = self.dlg.CRSFromProject.isChecked()
-            pass
+
+            if not os.path.exists(survex_3d):
+                raise Exception("File '%s' doesn't exist" % survex_3d)
+
+            if discard_features:
+                self.leg_list = []
+                self.station_list = []
+                self.station_xyz = {}
+                self.xsect_list = []
+
+            # Read .3d file as binary, parse, and save data structures
+            
+            with open(survex_3d, 'rb') as fp:
+    
+                line = fp.readline().rstrip() # File ID check
+                
+                if not line.startswith(b'Survex 3D Image File'):
+                    raise IOError('Not a survex .3d file: ' + survex_3d)
+
+                line = fp.readline().rstrip() # File format version
+                
+                if not line.startswith(b'v'):
+                    raise IOError('Unrecognised survex .3d version in ' + survex_3d)
+                
+                version = int(line[1:])
+                if version < 8:
+                    raise IOError('Survex .3d version >= 8 required in ' + survex_3d)
+
+                line = fp.readline().rstrip() # Metadata (title and coordinate system)
+                fields = line.split(b'\x00')
+
+                previous_title = '' if discard_features else self.title
+
+                if previous_title:
+                    self.title = previous_title + ' + ' + fields[0];
+                else:
+                    self.title = fields[0];
+
+                # Try to work out EPSG number from second field if available.
+                # The project_crs should end up as a lowercase string like 'epsg:7405'
+
+                if get_crs_from_project:
+                    project_crs = QgsProject.instance().crs()
+                    self.extract_epsg(project_crs.authid().lower())
+                elif get_crs_from_file and len(fields) > 1:
+                    self.extract_epsg(fields[1].decode('ascii'))
+                else:
+                    self.epsg = None
+
+                line = fp.readline().rstrip() # Timestamp, unused in present application
+
+                if not line.startswith(b'@'):
+                    raise IOError('Unrecognised timestamp in ' + survex_3d)
+
+                # timestamp = int(line[1:])
+
+                flag = ord(fp.read(1)) # file-wide flag
+
+                if flag & 0x80: # abort if extended elevation
+                    raise IOError("Can't deal with extended elevation in " + survex_3d)
+
+                # All front-end data read in, now read byte-wise
+                # according to .3d spec.  Note that all elements must
+                # be processed, in order, otherwise we get out of sync.
+
+                # We first define some baseline dates
+    
+                date0 = QDate(1900, 1, 1)
+                date1 = QDate(1900, 1, 1)
+                date2 = QDate(1900, 1, 1)
+
+                label, style = '', 0xff # initialise label and style
+                
+                legs = [] # will be used to capture leg data between MOVEs
+                xsect = [] # will be used to capture XSECT data
+                nlehv = None # .. remains None if there isn't any error data...
+
+                while True: # start of byte-gobbling while loop
+
+                    char = fp.read(1)
+
+                    if not char: # End of file (reached prematurely?)
+                        raise IOError('Premature end of file in ' + survex_3d)
+
+                    byte = ord(char)
+
+                    if byte <= 0x05: # STYLE
+                        if byte == 0x00 and style == 0x00: # this signals end of data
+                            if legs: # there may be a pending list of legs to save
+                                self.leg_list.append((legs,  nlehv))
+                            break # escape from byte-gobbling while loop
+                        else:
+                            style = byte
+                
+                    elif byte <= 0x0e: # Reserved
+                        continue
+        
+                    elif byte == 0x0f: # MOVE
+                        xyz = self.read_xyz(fp)
+                        if legs:
+                            self.leg_list.append((legs,  nlehv))
+                            legs = []
+
+                    elif byte == 0x10: # DATE (none)
+                        date1 = date2 = date0
+                                    
+                    elif byte == 0x11: # DATE (single date)
+                        days = unpack('<H', fp.read(2))[0]
+                        date1 = date2 = date0.addDays(days)
+            
+                    elif byte == 0x12:  # DATE (date range, short format)
+                        days, extra = unpack('<HB', fp.read(3))
+                        date1 = date0.addDays(days)
+                        date2 = date0.addDays(days + extra + 1)
+
+                    elif byte == 0x13: # DATE (date range, long format)
+                        days1, days2 = unpack('<HH', fp.read(4)) 
+                        date1 = date0.addDays(days1)
+                        date2 = date0.addDays(days2)
+
+                    elif byte <= 0x1e: # Reserved
+                        continue
+        
+                    elif byte == 0x1f:  # Error info
+                        nlehv = unpack('<iiiii', fp.read(20))
+            
+                    elif byte <= 0x2f: # Reserved
+                        continue
+            
+                    elif byte <= 0x33: # XSECT
+                        label = self.read_label(fp, label)
+                        if byte & 0x02:
+                            lrud = unpack('<iiii', fp.read(16))
+                        else:
+                            lrud = unpack('<hhhh', fp.read(8))
+                        xsect.append((label, lrud))
+                        if byte & 0x01: # XSECT_END
+                            self.xsect_list.append(xsect)
+                            xsect = []
+            
+                    elif byte <= 0x3f: # Reserved
+                        continue
+        
+                    elif byte <= 0x7f: # LINE
+                        flag = byte & 0x3f
+                        if not (flag & 0x20):
+                            label = self.read_label(fp, label)
+                        xyz_prev = xyz
+                        xyz = self.read_xyz(fp)
+                        while (True): # code pattern to implement logic
+                            if exclude_surface_legs and flag & 0x01: break
+                            if exclude_duplicate_legs and flag & 0x02: break
+                            if exclude_splay_legs and flag & 0x04: break
+                            legs.append(((xyz_prev, xyz), label, style, date1, date2, flag))
+                            break
+
+                    elif byte <= 0xff: # LABEL (or NODE)
+                        flag = byte & 0x7f
+                        label = self.read_label(fp, label)
+                        xyz = self.read_xyz(fp)
+                        while (True): # code pattern to implement logic
+                            if exclude_surface_stations and flag & 0x01 and not flag & 0x02: break
+                            self.station_list.append((xyz, label, flag))
+                            break
+                        self.station_xyz[label] = xyz
+
+                # End of byte-gobbling while loop
+
+            # file closes automatically, with open(survex_3d, 'rb') as fp:
+
+            msg = "%s imported succesfully" % (survex_3d)
+            QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
