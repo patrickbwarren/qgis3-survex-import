@@ -22,12 +22,14 @@
  ***************************************************************************/
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt5.QtCore import QFileInfo, QDate
+from PyQt5.QtCore import QFileInfo, QDate, QVariant
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QFileDialog
 
 from qgis.core import Qgis
-from qgis.core import QgsMessageLog, QgsProject
+from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
+from qgis.core import QgsPoint, QgsLineString
+from qgis.core import QgsMessageLog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -269,6 +271,19 @@ class SurvexImport:
         msg = "%s --> EPSG:%i" % (s, self.epsg)
         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
 
+# Note that 'PointZ', 'LineStringZ', 'PolygonZ' are possible in QGIS3
+
+    def add_layer(self, subtitle, geom):
+        """Add a memory layer with title and geom, and CRS if epsg defined"""
+        uri = '%s?crs=epsg:%i' % (geom, self.epsg) if self.epsg else geom
+        name = '%s - %s' % (self.title, subtitle) if self.title else subtitle
+        layer =  QgsVectorLayer(uri, name, 'memory')
+        if not layer.isValid():
+            raise Exception("Invalid layer with %s" % uri)
+        msg = "Memory layer '%s' called '%s' added" % (uri, name)
+        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+        return layer
+
 # The next two routines are to do with reading .3d binary file format
         
     def read_xyz(self, fp):
@@ -382,9 +397,9 @@ class SurvexImport:
                 previous_title = '' if discard_features else self.title
 
                 if previous_title:
-                    self.title = previous_title + ' + ' + fields[0];
+                    self.title = previous_title + ' + ' + fields[0].decode('ascii');
                 else:
-                    self.title = fields[0];
+                    self.title = fields[0].decode('ascii');
 
                 # Try to work out EPSG number from second field if available.
                 # The project_crs should end up as a lowercase string like 'epsg:7405'
@@ -520,3 +535,84 @@ class SurvexImport:
 
             msg = "%s imported succesfully" % (survex_3d)
             QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+            
+            layers = [] # used to keep a list of the created layers
+
+            if include_stations and self.station_list: # station layer
+                
+                station_layer = self.add_layer('stations', 'PointZ')
+    
+                attrs = [QgsField(self.station_attr[k], QVariant.Int) for k in self.station_flags]
+                attrs.insert(0, QgsField('ELEVATION', QVariant.Double))
+                attrs.insert(0, QgsField('NAME', QVariant.String))
+                station_layer.dataProvider().addAttributes(attrs)
+                station_layer.updateFields() 
+    
+                features = []
+
+                for (xyz, label, flag) in self.station_list:
+                    xyz = [0.01*v for v in xyz]
+                    attrs = [1 if flag & k else 0 for k in self.station_flags]
+                    attrs.insert(0, round(xyz[2], 2)) # elevation
+                    attrs.insert(0, label)
+                    feat = QgsFeature()
+                    geom = QgsGeometry(QgsPoint(*xyz))
+                    feat.setGeometry(geom)
+                    feat.setAttributes(attrs)
+                    features.append(feat)
+                    
+                station_layer.dataProvider().addFeatures(features)
+                layers.append(station_layer)
+
+            QgsMessageLog.logMessage("Created station layer", tag='Import .3d', level=Qgis.Info)
+
+            if include_legs and self.leg_list: # leg layer
+                
+                leg_layer = self.add_layer('legs', 'LineStringZ')
+                
+                attrs = [QgsField(self.leg_attr[k], QVariant.Int) for k in self.leg_flags]
+                if nlehv:
+                    [ attrs.insert(0, QgsField(s, QVariant.Double)) for s in self.error_fields ]
+                    attrs.insert(0, QgsField('NLEGS', QVariant.Int))
+                attrs.insert(0, QgsField('DATE2', QVariant.Date))
+                attrs.insert(0, QgsField('DATE1', QVariant.Date))
+                attrs.insert(0, QgsField('STYLE', QVariant.String))
+                attrs.insert(0, QgsField('ELEVATION', QVariant.Double))
+                attrs.insert(0, QgsField('NAME', QVariant.String))
+                leg_layer.dataProvider().addAttributes(attrs)
+                leg_layer.updateFields()
+                
+                features = []
+
+                for legs, nlehv in self.leg_list:
+                    for (xyz_pair, label, style, from_date, to_date, flag) in legs:
+                        elev = 0.5 * sum([0.01*xyz[2] for xyz in xyz_pair])
+                        points = []
+                        for xyz in xyz_pair:
+                            xyz = [0.01*v for v in xyz]
+                            points.append(QgsPoint(*xyz))
+                        attrs = [1 if flag & k else 0 for k in self.leg_flags]
+                        if nlehv:
+                            [ attrs.insert(0, 0.01*v) for v in reversed(nlehv[1:5]) ]
+                            attrs.insert(0, nlehv[0])
+                        attrs.insert(0, to_date)
+                        attrs.insert(0, from_date)
+                        attrs.insert(0, self.style_type[style])
+                        attrs.insert(0, round(elev, 2))
+                        attrs.insert(0, label)
+                        linestring = QgsLineString()
+                        linestring.setPoints(points)
+                        feat = QgsFeature()
+                        geom = QgsGeometry(linestring)
+                        feat.setGeometry(geom) 
+                        feat.setAttributes(attrs)
+                        features.append(feat)
+                    
+                leg_layer.dataProvider().addFeatures(features)
+                layers.append(leg_layer)
+
+            QgsMessageLog.logMessage("Created leg layer", tag='Import .3d', level=Qgis.Info)
+
+            if layers:
+                [ layer.updateExtents() for layer in layers ]
+                QgsProject.instance().addMapLayers(layers)
