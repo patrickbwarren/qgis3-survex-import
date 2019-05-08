@@ -13,7 +13,7 @@ build:
 
 install:
 	mkdir -p $(QGIS3_SURVEX_PLUGIN)
-	cp -v $(SOURCE)/icon.png $(QGIS3_SURVEX_PLUGIN)
-	cp -v $(SOURCE)/metadata.txt $(QGIS3_SURVEX_PLUGIN)
-	cp -v $(SOURCE)/*.py $(QGIS3_SURVEX_PLUGIN)
-	cp -v $(SOURCE)/*.ui $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(DEPLOY)/icon.png $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(DEPLOY)/metadata.txt $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(DEPLOY)/*.py $(QGIS3_SURVEX_PLUGIN)
+	cp -v $(DEPLOY)/*.ui $(QGIS3_SURVEX_PLUGIN)
