@@ -4,49 +4,49 @@
 
 ### Features
 
-* no dependencies, natively reads binary v8 format survex .3d files ;
-* import stations and legs with full metadata ;
-* create passage walls, cross-sections, and polygons from LRUD data ;
-* all features have _z_ dimensions, and (mean) elevations to assist coloring ;
-* CRS can be set from PROJ.4 string embedded in .3d file ;
-* save results into a GeoPackage (.gpkg) shapefile.
+* no dependencies, natively reads binary v8 format survex .3d files;
+* import stations and legs with full metadata;
+* create passage walls, cross-sections, and polygons from LRUD data;
+* all features have _z_ dimensions, and (mean) elevations to assist coloring;
+* CRS can be set from PROJ.4 string embedded in .3d file;
+* results can be saved immediately into a GeoPackage (.gpkg) shapefile.
 
 ### Installation
 
 To install the plugin:
 
-* clone or download this repository ;
+* clone or download this repository;
 * copy the `survex_import` directory to where the QGIS3 python3 plugins
-  should be installed (\*) ;
+  should be installed (\*);
 * run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
   Install Plugins...' (make sure the box next to 'Import .3d file'
   is checked, in the 'Installed' tab).
 
 When installed, a menu item 'Import .3d file' should appear on the
-'Vector' drop-down menu in the main QGIS3 window, and (possibly) a
-.3d icon in a toolbar (if enabled).
+'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
+.3d icon in a toolbar.
 
 (\*) under unix (linux) the copy command would be
 ```
 cp -R survex_import ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
 ```
 Alternatively if you have `pb_tool` you can
-run `pb_tool deply` in this directory.
+run `pb_tool deploy` in this directory.
 
 ### Usage
 
 Selecting 'Import .3d file' (or clicking on the .3d icon) brings up a
 window for the user to select a .3d file with a number of options:
 
-* Import legs, with options to include splay, duplicate, and surface legs ;
-* Import stations, with the option to include surface stations (\*) ;
+* Import legs, with options to include splay, duplicate, and surface legs;
+* Import stations, with the option to include surface stations (\*);
 * Import passage data computed from LRUDs, with the option to use clino weights (see below):
-    - as polygons, with an option to include mean up / down data ;
-    - as walls ;
-    - as cross sections ;
-    - as traverses, showing the centrelines used for above ;
-* Get CRS from .3d file, or inherit from QGIS3 project ;
-* Keep features from previous import(s) ;
+    - as polygons, with an option to include mean up / down data;
+    - as walls;
+    - as cross sections;
+    - as traverses, showing the centrelines used for above;
+* Get CRS from .3d file, or inherit from QGIS3 project;
+* Keep features from previous import(s);
 * Select a GeoPackage (.gpkg) file to save results (optional).
   
 (\*) In rare cases a station may be flagged both surface and
@@ -198,47 +198,44 @@ show the name as a pop-up label.  For this to work:
 * 'View &rarr; Map Tips' should be checked in the main menu;
 * the map tip has to be set up to use the NAME field
   ('Properties &rarr; Display') in the relevant layer;
-* the layer has to be the currently _selected_ one, though
-  it does not have to be displayed.
+* the layer has to be the currently _selected_ one, though one can set
+  the symbology to 'No symbols' to avoid having to display the features.
 
 With a _digital elevation model_ (DEM raster layer) even more
 interesting things can be done.  For example one can use raster
-interpolation [_how to do this in QGIS3?_] to find the surface elevation at
+interpolation to find the surface elevation at
 all the imported stations and save for example to a SURFACE_ELEV
 field.  Then, one can use the field calculator to make a
 DEPTH field containing the depth below surface, as SURFACE_ELEV minus
 ELEVATION.  Stations can be coloured by this, or the information can
 be added to the 'map tip', etc.
 
-Three dimensional views can be made with the Qgis2threejs plugin,
-usually in combination with a DEM [_or directly in QGIS3?_].  To
-render features in 3d _either_ use the ELEVATION attribute to set the
-absolute height, _or_ (better) save the imported data to a shapefile
-(eg as a GeoPackage) and re-import so that QGIS3 knows about the _z_
-dimension data and can pass it on to the plugin to inform the
-rendering [_check what happens with QGIS3_].  Passage 'tubes' like
-those in aven can be approximately rendered using polygons, with the
-base set to floor level and the extruded height set to roof level.  To
-do this import the MEAN_UP and MEAN_DOWN fields mentioned above and
-use the field calculator to make two new floating point (double)
-fields: FLOOR equal to ELEVATION minus MEAN_DOWN, and HEIGHT equal to
-MEAN_DOWN plus MEAN_UP.  Then render the polygons with the _z_
-co-ordinate as the absolute FLOOR, and extruded height as HEIGHT.
+Three dimensional views can be made directly in QGIS3 with 3D Map View
+though more conveniently with the Qgis2threejs plugin, usually in
+combination with a DEM.  To render features in 3d use the _z_
+co-ordinate for points and lines.  Passage 'tubes' like those in aven
+can be approximately rendered using LRUD polygons, with the base set to
+floor level and the extruded height set to roof level.  To do this
+import the MEAN_UP and MEAN_DOWN fields mentioned above and use the
+field calculator to make two new floating point (double) fields: FLOOR
+equal to ELEVATION minus MEAN_DOWN, and HEIGHT equal to MEAN_DOWN plus
+MEAN_UP.  Then render the polygons with the _z_ co-ordinate as the
+absolute FLOOR, and extruded height as HEIGHT.
 
-Sample georeferenced survey data can be found in
-[`DowProv.3d`](DowProv/DowProv.3d).
+Sample georeferenced survey data can be found in the `example` directory as
+[`DowProv.3d`](example/DowProv.3d).
 
-The corresponding GeoPackage file is
-[`DowProv.gpkg`](DowProv/DowProv.gpkg).
+The corresponding GeoPackage file is in the `example` directory as
+[`DowProv.gpkg`](example/DowProv.gpkg).
 
 Further notes on cave surveying and GIS are in 
-[`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf).
+[`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf) in `docs`.
 
 ### Copying
 
 Code in this repository is licensed under GLP v2:
 
-This program is free software: you can redistribute it and/or modify
+This program is free software: you can redistribute it and / or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
@@ -258,4 +255,4 @@ The .3d file parser is based on a GPL v2 library to handle Survex 3D files (`*.3
 copyright &copy; 2008-2012 Thomas Holder, http://sf.net/users/speleo3/; 
 see https://github.com/speleo3/inkscape-speleo.
 
-Modifications and extensions copyright &copy; (2019) Patrick B Warren.
+Modifications and extensions copyright &copy; (2018-2019) Patrick B Warren.
