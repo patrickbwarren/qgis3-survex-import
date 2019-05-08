@@ -2,7 +2,7 @@
 
 #### For the QGIS 2 plugin visit https://github.com/patrickbwarren/qgis-survex-import
 
-### Features
+### Features (version 1.0)
 
 * no dependencies, natively reads binary v8 format survex .3d files;
 * import stations and legs with full metadata;

@@ -1,4 +1,4 @@
-# Plugin code
+# Plugin code (version 1.0)
 
 To install, copy this whole directory to
 where QGIS3 looks for the python plugins (\*).  Alternatively if you

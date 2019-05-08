@@ -10,7 +10,7 @@
 name=Import .3d file
 qgisMinimumVersion=3.0
 description=Import features from survex .3d files
-version=0.1
+version=1.0
 author=Patrick B Warren
 email=patrickbwarren@gmail.com
 
