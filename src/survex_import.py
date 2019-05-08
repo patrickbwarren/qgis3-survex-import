@@ -29,7 +29,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 from qgis.core import Qgis
 from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
 from qgis.core import QgsPoint, QgsLineString, QgsPolygon
-from qgis.core import QgsMessageLog
+from qgis.core import QgsVectorFileWriter, QgsMessageLog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -329,14 +329,12 @@ class SurvexImport:
             self.dlg.CRSFromFile.setChecked(False)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
 
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
+
+        self.dlg.show() # show the dialog
+
+        result = self.dlg.exec_() # Run the dialog event loop
+
+        if result:  # The user pressed OK, and this is what happened next!
 
             survex_3d = self.dlg.selectedFile.text()
             gpkg_file = self.dlg.selectedGPKG.text()
@@ -780,3 +778,25 @@ class SurvexImport:
             if layers:
                 [ layer.updateExtents() for layer in layers ]
                 QgsProject.instance().addMapLayers(layers)
+
+            # Write to GeoPackage if requested
+
+            if gpkg_file:
+                opts = [QgsVectorFileWriter.CreateOrOverwriteFile, QgsVectorFileWriter.CreateOrOverwriteLayer]
+                for i, layer in enumerate(layers):
+                    options = QgsVectorFileWriter.SaveVectorOptions()
+                    options.actionOnExistingFile = opts[int(i > 0)] # create file or layer
+                    layer_name = layer.name()
+                    match = search(' - ([a-z]*)', layer_name) # ie, extract 'legs', 'stations', etc
+                    options.layerName = str(match.group(1)) if match else layer_name
+                    writer = QgsVectorFileWriter.writeAsVectorFormat(layer, gpkg_file, options)
+                    if writer:
+                        msg = "'%s' -> %s in %s" % (layer_name, options.layerName, gpkg_file)
+                        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+                    options, writer = None, None
+
+        # End of if result (what happens if user pressed OK)
+
+    # End of run function definition
+
+# That's it
