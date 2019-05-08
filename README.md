@@ -1,16 +1,13 @@
 # QGIS3 plugin to import survex .3d files
 
-_UNFINISHED ... work in progress ... watch this space_
-
-_Requires QGIS3 and 
-.3d files produced by survex &ge; 1.2.14 for v8 binary format._
+#### For the QGIS 2 plugin visit https://github.com/patrickbwarren/qgis-survex-import
 
 ### Features
 
 * no dependencies, natively reads binary v8 format survex .3d files ;
 * import stations and legs with full metadata ;
-* features carry _z_ dimension (elevation) data ;
 * create passage walls, cross-sections, and polygons from LRUD data ;
+* all features have _z_ dimensions, and (mean) elevations to assist coloring ;
 * CRS can be set from PROJ.4 string embedded in .3d file ;
 * save results into a GeoPackage (.gpkg) shapefile.
 
@@ -20,24 +17,21 @@ To install the plugin:
 
 * clone or download this repository ;
 * copy the `survex_import` directory to where the QGIS3 python3 plugins
-  should be installed (see below) ;
+  should be installed (\*) ;
 * run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
-  Install Plugins...' and make sure the box next to 'Import .3d file'
-  is checked, in the 'Installed' tab.
+  Install Plugins...' (make sure the box next to 'Import .3d file'
+  is checked, in the 'Installed' tab).
 
 When installed, a menu item 'Import .3d file' should appear on the
 'Vector' drop-down menu in the main QGIS3 window, and (possibly) a
 .3d icon in a toolbar (if enabled).
 
-Under unix (linux) the copy command would be
+(\*) under unix (linux) the copy command would be
 ```
 cp -R survex_import ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
 ```
-
-Note that the `SurvexImport` directory in the repository is
-automatically populated by running `pb_tool deploy` in the
-`..\survex_import` directory.  Make all edits in that directory; any
-changes or additions made in `SurvexImport` will be overwritten!
+Alternatively if you have `pb_tool` you can
+run `pb_tool deply` in this directory.
 
 ### Usage
 
@@ -114,18 +108,6 @@ automatically, depending on the system-wide QGIS3 settings.
 To maximise the likelihood that CRS import from .3d file works as
 expected, use an EPSG code in the `*cs out` survex command rather than
 a PROJ.4 string.
-
-[_The following may not apply to QGIS3?_]
-There is one point to bear in mind regarding the _z_ dimension data.
-Because of the (current) limitations for creating vector layers in
-memory, the layer type does not explicitly
-know that the features include _z_ dimensions.  To ensure the _z_
-dimension data is correctly incorporated when saving layers by hand,
-in the 'Save as ...'  dialog make sure that the geometry type is
-specified (ie 'Point' for stations, 'Polygon' for polygons, and
-'LineString' for everything else) and the 'Include _z_ dimension' box
-is checked.  This is done automatically when saving to the GeoPackage
-file if requested.
 
 #### Passage walls
 
