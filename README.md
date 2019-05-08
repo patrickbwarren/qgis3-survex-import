@@ -26,10 +26,12 @@ When installed, a menu item 'Import .3d file' should appear on the
 'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
 .3d icon in a toolbar.
 
-(\*) under unix (linux) the copy command would be
+(\*) under unix (linux) this is likely to be
 ```
-cp -R survex_import ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
 ```
+Otherwise determine the location from within QGIS3 by 'Settings &rarr;
+User Profiles &rarr; Open Active Profile Folder'.
 Alternatively if you have `pb_tool` you can
 run `pb_tool deploy` in this directory.
 
