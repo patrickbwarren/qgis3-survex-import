@@ -28,8 +28,8 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 from qgis.core import Qgis
 from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
-from qgis.core import QgsPoint, QgsLineString
-from qgis.core import QgsMessageLog
+from qgis.core import QgsPoint, QgsLineString, QgsPolygon
+from qgis.core import QgsVectorFileWriter, QgsMessageLog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -271,8 +271,6 @@ class SurvexImport:
         msg = "%s --> EPSG:%i" % (s, self.epsg)
         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
 
-# Note that 'PointZ', 'LineStringZ', 'PolygonZ' are possible in QGIS3
-
     def add_layer(self, subtitle, geom):
         """Add a memory layer with title and geom, and CRS if epsg defined"""
         uri = '%s?crs=epsg:%i' % (geom, self.epsg) if self.epsg else geom
@@ -285,11 +283,11 @@ class SurvexImport:
         return layer
 
 # The next two routines are to do with reading .3d binary file format
-        
+
     def read_xyz(self, fp):
-        """Read xyz as integers, according to .3d spec""" 
+        """Read xyz as integers, according to .3d spec"""
         return unpack('<iii', fp.read(12))
-        
+
     def read_len(self, fp):
         """Read a number as a length according to .3d spec"""
         byte = ord(fp.read(1))
@@ -318,10 +316,10 @@ class SurvexImport:
         if self.first_start == True:
             self.first_start = False
             self.dlg = SurvexImportDialog()
-        
+
             self.dlg.selectedFile.clear()
             self.dlg.fileSelector.clicked.connect(self.select_3d_file)
-        
+
             self.dlg.selectedGPKG.clear()
             self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
 
@@ -331,14 +329,12 @@ class SurvexImport:
             self.dlg.CRSFromFile.setChecked(False)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
 
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
+
+        self.dlg.show() # show the dialog
+
+        result = self.dlg.exec_() # Run the dialog event loop
+
+        if result:  # The user pressed OK, and this is what happened next!
 
             survex_3d = self.dlg.selectedFile.text()
             gpkg_file = self.dlg.selectedGPKG.text()
@@ -360,7 +356,7 @@ class SurvexImport:
             include_up_down = self.dlg.IncludeUpDown.isChecked()
 
             discard_features = not self.dlg.KeepFeatures.isChecked()
-            
+
             get_crs_from_file = self.dlg.CRSFromFile.isChecked()
             get_crs_from_project = self.dlg.CRSFromProject.isChecked()
 
@@ -374,19 +370,19 @@ class SurvexImport:
                 self.xsect_list = []
 
             # Read .3d file as binary, parse, and save data structures
-            
+
             with open(survex_3d, 'rb') as fp:
-    
+
                 line = fp.readline().rstrip() # File ID check
-                
+
                 if not line.startswith(b'Survex 3D Image File'):
                     raise IOError('Not a survex .3d file: ' + survex_3d)
 
                 line = fp.readline().rstrip() # File format version
-                
+
                 if not line.startswith(b'v'):
                     raise IOError('Unrecognised survex .3d version in ' + survex_3d)
-                
+
                 version = int(line[1:])
                 if version < 8:
                     raise IOError('Survex .3d version >= 8 required in ' + survex_3d)
@@ -429,13 +425,13 @@ class SurvexImport:
                 # be processed, in order, otherwise we get out of sync.
 
                 # We first define some baseline dates
-    
+
                 date0 = QDate(1900, 1, 1)
                 date1 = QDate(1900, 1, 1)
                 date2 = QDate(1900, 1, 1)
 
                 label, style = '', 0xff # initialise label and style
-                
+
                 legs = [] # will be used to capture leg data between MOVEs
                 xsect = [] # will be used to capture XSECT data
                 nlehv = None # .. remains None if there isn't any error data...
@@ -456,10 +452,10 @@ class SurvexImport:
                             break # escape from byte-gobbling while loop
                         else:
                             style = byte
-                
+
                     elif byte <= 0x0e: # Reserved
                         continue
-        
+
                     elif byte == 0x0f: # MOVE
                         xyz = self.read_xyz(fp)
                         if legs:
@@ -468,30 +464,30 @@ class SurvexImport:
 
                     elif byte == 0x10: # DATE (none)
                         date1 = date2 = date0
-                                    
+
                     elif byte == 0x11: # DATE (single date)
                         days = unpack('<H', fp.read(2))[0]
                         date1 = date2 = date0.addDays(days)
-            
+
                     elif byte == 0x12:  # DATE (date range, short format)
                         days, extra = unpack('<HB', fp.read(3))
                         date1 = date0.addDays(days)
                         date2 = date0.addDays(days + extra + 1)
 
                     elif byte == 0x13: # DATE (date range, long format)
-                        days1, days2 = unpack('<HH', fp.read(4)) 
+                        days1, days2 = unpack('<HH', fp.read(4))
                         date1 = date0.addDays(days1)
                         date2 = date0.addDays(days2)
 
                     elif byte <= 0x1e: # Reserved
                         continue
-        
+
                     elif byte == 0x1f:  # Error info
                         nlehv = unpack('<iiiii', fp.read(20))
-            
+
                     elif byte <= 0x2f: # Reserved
                         continue
-            
+
                     elif byte <= 0x33: # XSECT
                         label = self.read_label(fp, label)
                         if byte & 0x02:
@@ -502,10 +498,10 @@ class SurvexImport:
                         if byte & 0x01: # XSECT_END
                             self.xsect_list.append(xsect)
                             xsect = []
-            
+
                     elif byte <= 0x3f: # Reserved
                         continue
-        
+
                     elif byte <= 0x7f: # LINE
                         flag = byte & 0x3f
                         if not (flag & 0x20):
@@ -533,21 +529,18 @@ class SurvexImport:
 
             # file closes automatically, with open(survex_3d, 'rb') as fp:
 
-            msg = "%s imported succesfully" % (survex_3d)
-            QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
-            
             layers = [] # used to keep a list of the created layers
 
             if include_stations and self.station_list: # station layer
-                
+
                 station_layer = self.add_layer('stations', 'PointZ')
-    
+
                 attrs = [QgsField(self.station_attr[k], QVariant.Int) for k in self.station_flags]
                 attrs.insert(0, QgsField('ELEVATION', QVariant.Double))
                 attrs.insert(0, QgsField('NAME', QVariant.String))
                 station_layer.dataProvider().addAttributes(attrs)
-                station_layer.updateFields() 
-    
+                station_layer.updateFields()
+
                 features = []
 
                 for (xyz, label, flag) in self.station_list:
@@ -560,16 +553,14 @@ class SurvexImport:
                     feat.setGeometry(geom)
                     feat.setAttributes(attrs)
                     features.append(feat)
-                    
+
                 station_layer.dataProvider().addFeatures(features)
                 layers.append(station_layer)
 
-            QgsMessageLog.logMessage("Created station layer", tag='Import .3d', level=Qgis.Info)
-
             if include_legs and self.leg_list: # leg layer
-                
+
                 leg_layer = self.add_layer('legs', 'LineStringZ')
-                
+
                 attrs = [QgsField(self.leg_attr[k], QVariant.Int) for k in self.leg_flags]
                 if nlehv:
                     [ attrs.insert(0, QgsField(s, QVariant.Double)) for s in self.error_fields ]
@@ -581,7 +572,7 @@ class SurvexImport:
                 attrs.insert(0, QgsField('NAME', QVariant.String))
                 leg_layer.dataProvider().addAttributes(attrs)
                 leg_layer.updateFields()
-                
+
                 features = []
 
                 for legs, nlehv in self.leg_list:
@@ -604,15 +595,208 @@ class SurvexImport:
                         linestring.setPoints(points)
                         feat = QgsFeature()
                         geom = QgsGeometry(linestring)
-                        feat.setGeometry(geom) 
+                        feat.setGeometry(geom)
                         feat.setAttributes(attrs)
                         features.append(feat)
-                    
+
                 leg_layer.dataProvider().addFeatures(features)
                 layers.append(leg_layer)
 
-            QgsMessageLog.logMessage("Created leg layer", tag='Import .3d', level=Qgis.Info)
+            # Now do wall features if asked
+
+            if (include_traverses or include_xsections
+                or include_walls or include_polygons) and self.xsect_list:
+
+                trav_features = []
+                wall_features = []
+                xsect_features = []
+                quad_features = []
+
+                for xsect in self.xsect_list:
+
+                    if len(xsect) < 2: # if there's only one station ..
+                        continue # .. give up as we don't know which way to face
+
+                    centerline = [] # will contain the station position and LRUD data
+
+                    for label, lrud in xsect:
+                        xyz = self.station_xyz[label] # look up coordinates from label
+                        lrud_or_zero = tuple([max(0, v) for v in lrud]) # deal with missing data
+                        centerline.append(xyz + lrud_or_zero) # and collect as 7-uple
+
+                    direction = [] # will contain the corresponding direction vectors
+
+                    # The calculations below use integers for xyz and lrud, and
+                    # conversion to metres is left to the end.  Then dh2 is an
+                    # integer and the test for a plumb is safely dh2 = 0.
+
+                    # The directions are unit vectors optionally weighted by
+                    # cos(inclination) = dh/dl where dh^2 = dx^2 + dy^2 + dz^2
+                    # and dl^2 = dh^2 + dz^2.  The normalisation is correspondingly
+                    # either 1/dh, or 1/dh * dh/dl = 1/dl.
+
+                    for i, xyzlrud in enumerate(centerline):
+                        x, y, z = xyzlrud[0:3]
+                        if i > 0:
+                            dx, dy, dz = x - xp, y - yp, z - zp
+                            dh2 = dx*dx + dy*dy # integer horizontal displacement (mm^2)
+                            norm = sqrt(dh2 + dz*dz) if use_clino_wgt else sqrt(dh2)
+                            dx, dy = (dx/norm, dy/norm) if dh2 > 0 and norm > 0 else (0, 0)
+                            direction.append((dx, dy))
+                        xp, yp, zp = x, y, z
+
+                    left_wall = []
+                    right_wall = []
+                    up_down = []
+
+                    # We build the walls by walking through the list
+                    # of stations and directions, with simple defaults
+                    # for the start and end stations
+
+                    for i, (x, y, z, l, r, u, d) in enumerate(centerline):
+                        d1x, d1y = direction[i-1] if i > 0 else (0, 0)
+                        d2x, d2y = direction[i] if i+1 < len(centerline) else (0, 0)
+                        dx, dy = d1x+d2x, d1y+d2y # mean (sum of) direction vectors
+                        norm = sqrt(dx*dx + dy*dy) # normalise to unit vector
+                        ex, ey = (dx/norm, dy/norm) if norm > 0 else (0, 0)
+                        # Convert to metres when saving the points
+                        left_wall.append((0.01*(x-l*ey), 0.01*(y+l*ex), 0.01*z))
+                        right_wall.append((0.01*(x+r*ey), 0.01*(y-r*ex), 0.01*z))
+                        up_down.append((0.01*u, 0.01*d))
+
+                    # Mean elevation of centerline, used for elevation attribute
+
+                    elev = 0.01 * sum([xyzlrud[2] for xyzlrud in centerline]) / len(centerline)
+                    attrs = [round(elev, 2)]
+
+                    # Now create the feature sets - first the centerline traverse
+
+                    points = []
+
+                    for xyzlrud in centerline:
+                        xyz = [0.01*v for v in xyzlrud[0:3]] # These were mm, convert to metres
+                        points.append(QgsPoint(*xyz))
+
+                    linestring = QgsLineString()
+                    linestring.setPoints(points)
+                    feat = QgsFeature()
+                    geom = QgsGeometry(linestring)
+                    feat.setGeometry(geom)
+                    feat.setAttributes(attrs)
+                    trav_features.append(feat)
+
+                    # The walls as line strings
+
+                    for wall in (left_wall, right_wall):
+
+                        points = [QgsPoint(*xyz) for xyz in wall]
+                        linestring = QgsLineString()
+                        linestring.setPoints(points)
+                        feat = QgsFeature()
+                        geom = QgsGeometry(linestring)
+                        feat.setGeometry(geom)
+                        feat.setAttributes(attrs)
+                        wall_features.append(feat)
+
+                    # Slightly more elaborate, pair up points on left
+                    # and right walls, and build a cross section as a
+                    # 2-point line string, and a quadrilateral polygon
+                    # with a closed 5-point line string for the
+                    # exterior ring.  Note that QGIS polygons are
+                    # supposed to have their points ordered clockwise.
+
+                    for i, xyz_pair in enumerate(zip(left_wall, right_wall)):
+
+                        elev = 0.01 * centerline[i][2] # elevation of station in centerline
+                        attrs = [round(elev, 2)]
+                        points = [QgsPoint(*xyz) for xyz in xyz_pair]
+                        linestring = QgsLineString()
+                        linestring.setPoints(points)
+                        feat = QgsFeature()
+                        geom = QgsGeometry(linestring)
+                        feat.setGeometry(geom)
+                        feat.setAttributes(attrs)
+                        xsect_features.append(feat)
+
+                        if i > 0:
+                            elev = 0.5*(prev_xyz_pair[0][2] + xyz_pair[0][2]) # average elevation
+                            attrs = [round(elev, 2)]
+                            if include_up_down: # average up / down
+                                attrs += [ 0.5*(v1+v2) for (v1, v2) in zip(up_down[i-1], up_down[i]) ]
+                            points = [] # will contain the exterior 5-point ring, as follows...
+                            for xyz in tuple(reversed(prev_xyz_pair)) + xyz_pair + (prev_xyz_pair[1],):
+                                points.append(QgsPoint(*xyz))
+                            linestring = QgsLineString()
+                            linestring.setPoints(points)
+                            polygon = QgsPolygon()
+                            polygon.setExteriorRing(linestring)
+                            feat = QgsFeature()
+                            geom = QgsGeometry(polygon)
+                            feat.setGeometry(geom)
+                            feat.setAttributes(attrs)
+                            quad_features.append(feat)
+
+                        prev_xyz_pair = xyz_pair
+
+                # End of processing xsect_list - now add features to requested layers
+
+                attrs = [QgsField('ELEVATION', QVariant.Double)] # common to all
+
+                if include_traverses and trav_features: # traverse layer
+                    travs_layer = self.add_layer('traverses', 'LineStringZ')
+                    travs_layer.dataProvider().addAttributes(attrs)
+                    travs_layer.updateFields()
+                    travs_layer.dataProvider().addFeatures(trav_features)
+                    layers.append(travs_layer)
+
+                if include_xsections and xsect_features: # xsection layer
+                    xsects_layer = self.add_layer('xsections', 'LineStringZ')
+                    xsects_layer.dataProvider().addAttributes(attrs)
+                    xsects_layer.updateFields()
+                    xsects_layer.dataProvider().addFeatures(xsect_features)
+                    layers.append(xsects_layer)
+
+                if include_walls and wall_features: # wall layer
+                    walls_layer = self.add_layer('walls', 'LineStringZ')
+                    walls_layer.dataProvider().addAttributes(attrs)
+                    walls_layer.updateFields()
+                    walls_layer.dataProvider().addFeatures(wall_features)
+                    layers.append(walls_layer)
+
+                if include_up_down: # add fields if requested for polygons
+                    attrs += [QgsField(s, QVariant.Double) for s in ('MEAN_UP', 'MEAN_DOWN')]
+
+                if include_polygons and quad_features: # polygon layer
+                    quads_layer = self.add_layer('polygons', 'PolygonZ')
+                    quads_layer.dataProvider().addAttributes(attrs)
+                    quads_layer.updateFields()
+                    quads_layer.dataProvider().addFeatures(quad_features)
+                    layers.append(quads_layer)
+
+            # All layers have been created, now update extents and add to QGIS registry
 
             if layers:
                 [ layer.updateExtents() for layer in layers ]
                 QgsProject.instance().addMapLayers(layers)
+
+            # Write to GeoPackage if requested
+
+            if gpkg_file:
+                opts = [QgsVectorFileWriter.CreateOrOverwriteFile, QgsVectorFileWriter.CreateOrOverwriteLayer]
+                for i, layer in enumerate(layers):
+                    options = QgsVectorFileWriter.SaveVectorOptions()
+                    options.actionOnExistingFile = opts[int(i > 0)] # create file or layer
+                    layer_name = layer.name()
+                    match = search(' - ([a-z]*)', layer_name) # ie, extract 'legs', 'stations', etc
+                    options.layerName = str(match.group(1)) if match else layer_name
+                    writer = QgsVectorFileWriter.writeAsVectorFormat(layer, gpkg_file, options)
+                    if writer:
+                        msg = "'%s' -> %s in %s" % (layer_name, options.layerName, gpkg_file)
+                        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+                    options, writer = None, None
+
+        # End of if result (what happens if user pressed OK)
+
+    # End of run function definition
+
+# That's it
