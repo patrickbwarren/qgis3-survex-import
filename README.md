@@ -16,24 +16,20 @@
 To install the plugin:
 
 * clone or download this repository;
-* copy the `survex_import` directory to where the QGIS3 python3 plugins
-  should be installed (\*);
-* run QGIS3 and enable the plugin by going to 'Plugins &rarr; Manage and
-  Install Plugins...' (make sure the box next to 'Import .3d file'
-  is checked, in the 'Installed' tab).
+* copy `survex_import` to `python/plugins/` in the current active
+  profile, the location of which can be found from within QGIS3 by
+  going to 'Settings &rarr; User Profiles &rarr; Open Active Profile
+  Folder' (\*);
+* enable the plugin in QGIS3 by going to 'Plugins &rarr; Manage and
+  Install Plugins...'; make sure the box next to 'Import .3d file'
+  is checked, in the 'Installed' tab.
+
+(\*) Alternatively if you have `pb_tool` you can run `pb_tool
+deploy` from _within_ the `survex_import` directory.
 
 When installed, a menu item 'Import .3d file' should appear on the
 'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
 .3d icon in a toolbar.
-
-(\*) under unix (linux) this is likely to be
-```
-~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
-```
-Otherwise determine the location from within QGIS3 by 'Settings &rarr;
-User Profiles &rarr; Open Active Profile Folder'.
-Alternatively if you have `pb_tool` you can
-run `pb_tool deploy` in this directory.
 
 ### Usage
 
@@ -158,39 +154,39 @@ reality may be pure coincidence: if in doubt, use splays!
 
 Once the data is in QGIS3 one can do various things with it.
 
-For example, features (stations, legs, polygons) can be coloured
+For example, features (stations, legs, polygons) can be colored
 by elevation to mimic the behaviour of the `aven` viewer in survex
 (hat tip Julian Todd for figuring some of this out).  The easiest way
 to do this is to use the `.qml` style files provided in this
-repository.  For example to colour legs by depth, open the properties
+repository.  For example to color legs by depth, open the properties
 dialog and under the 'Style' tab, at the bottom select 'Style &rarr;
-Load Style', then choose one of the `colour_lines_by_elevation*.qml`
-style files.  This will apply a colour scheme to the ELEVATION field
-data with an inverted spectral colour ramp.  Use `lines` for legs,
+Load Style', then choose one of the `color_lines_by_elevation*.qml`
+style files.  This will apply a color scheme to the ELEVATION field
+data with an inverted spectral color ramp.  Use `lines` for legs,
 walls, cross sections and traverses; `points` for stations; and
 `polygons` for polygons.
 
 Two versions of these style files are provided.
 
-The first version uses a graduated, inverted spectral colour ramp to
-colour ranges of ELEVATION.  A small limitation is that these ranges
+The first version uses a graduated, inverted spectral color ramp to
+color ranges of ELEVATION.  A small limitation is that these ranges
 are not automatically updated to match the vertical range of the
 current data set, but these can be refreshed by clicking on 'Classify'
 (then 'Apply' to see the changes).
 
 The second version uses a simple marker (line, or fill) with the
-colour set by an expression that maps the ELEVATION to a spectral
-colour ramp.  There are no ranges here, but rather these styles rely
+color set by an expression that maps the ELEVATION to a spectral
+color ramp.  There are no ranges here, but rather these styles rely
 on _zmin_ and _zmax_ variables being set (see 'Variables' tab under
 layer &rarr; Properties).  By matching _zmin_ and _zmax_ between layers
-with these styles, one can be assured that a common colouring scheme
+with these styles, one can be assured that a common coloring scheme
 is being applied.  A handy way to choose values for _zmin_ and _zmax_ is
 to open the statistics panel (View &rarr; Panels &rarr; Statistics
 Panel) to check out the min and max values in the ELEVATION field.
 
-Colour legs by date is possible using an expression like
+Color legs by date is possible using an expression like
 `day(age("DATE1",'1970-01-01'))` (which gives the number of days
-between the recorded DATE1 and the given date).  Colour legs by error
+between the recorded DATE1 and the given date).  Color legs by error
 is also possible.
 
 Another thing one can do is enable 'map tips', for example to use the
@@ -209,7 +205,7 @@ interpolation to find the surface elevation at
 all the imported stations and save for example to a SURFACE_ELEV
 field.  Then, one can use the field calculator to make a
 DEPTH field containing the depth below surface, as SURFACE_ELEV minus
-ELEVATION.  Stations can be coloured by this, or the information can
+ELEVATION.  Stations can be colored by this, or the information can
 be added to the 'map tip', etc.
 
 Three dimensional views can be made directly in QGIS3 with 3D Map View
@@ -223,6 +219,42 @@ field calculator to make two new floating point (double) fields: FLOOR
 equal to ELEVATION minus MEAN_DOWN, and HEIGHT equal to MEAN_DOWN plus
 MEAN_UP.  Then render the polygons with the _z_ co-ordinate as the
 absolute FLOOR, and extruded height as HEIGHT.
+
+Note that there is currently a bug in the Qgis2threejs plugin for
+QGIS3 that causes a python error when features have data defined
+properties, such as color by elevation using _zmin_ and _zmax_
+variables (second option above).  The error looks like
+
+```
+AttributeError:'QgsSimpleLineSymbolLayer' object has no attribute 'dataDefinedProperty'
+```
+(The problem doesn't arise if features are colored by ranges as in the first
+option above.)
+
+A workaround is as follows.  First add _zmin_ and _zmax_ variables
+into the layer properties (bring up the Properties window and go to
+the Variables tab): use the green '+' button to add two new variables
+then click on Apply and OK.  Choose values suited to the data set of
+interest (as above), for example for the DowProv case they can be set
+to 320 and 400 respectively (elevation in metres ODN).  Second, make
+sure in the main QGIS map window the features in the layer of interest
+(eg legs) use _only_ a simple style with a fixed colour (this is the
+default).  Third, in the Qgis2threejs Exporter window, double click on
+the layer of interest (eg legs) to bring up the layer properties, and
+in the Style panel select Color &rarr; Expression.  Paste the
+following into the Expression box.
+```
+ramp_color('Spectral',scale_linear("ELEVATION",@zmin,@zmax,1,0))
+```
+If all is well the lines in the Qgis2threejs Exporter preview window
+should change to be colored by elevation.
+
+Note that if you encountered the python error the plugin may not
+function correctly any more.  It may have to reloaded (which can be
+done if you have installed the 'Plugin Reloader' plugin); or QGIS3
+restarted.
+
+### Example
 
 Sample georeferenced survey data can be found in the `example` directory as
 [`DowProv.3d`](example/DowProv.3d).
