@@ -128,11 +128,14 @@ An SRS usually comprises:
 \item
   a map projection which is nearly always a
   \href{https://en.wikipedia.org/wiki/Transverse_Mercator_projection}{Transverse
-  Mercator} projection, such as the
+    Mercator} projection, such as the
   \href{https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system}{Universal
-  Transverse Mercator (UTM)} system used in GPS: the map projection
-  tries to optimally flatten the curved surface of the earth (there is
-  always some compromise involved here);
+    Transverse Mercator (UTM)} system used in GPS: the map projection
+  tries to flatten \emph{locally} the curved surface of the earth
+  (there is always some compromise involved here) and a given geodetic
+  datum may have more than one map projection depending which part of
+  the Earth's surface one is interested in (UTM has 60 zones for
+  instance, and all karst in mainland Britain lies in UTM zone 30N);
 \item
   a co-ordinate system (typically metric) defined on top of the map
   projection, usually specifying a `false origin' so that
@@ -459,8 +462,7 @@ found in the
 \href{https://github.com/patrickbwarren/qgis-survex-import}{QGIS2} and
 \href{https://github.com/patrickbwarren/qgis3-survex-import}{QGIS3}
 plugin repositories.
-Additional import scripts can be found in \verb+extra+ in
-\href{https://github.com/patrickbwarren/qgis-survex-import}{QGIS2}.
+Additional scripts can be found in the \verb+extra+  directories.
 
 \subsection{Georeferencing images, maps, and old
 surveys}\label{georeferencing-images-maps-and-old-surveys}
