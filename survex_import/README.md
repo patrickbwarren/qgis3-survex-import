@@ -1,4 +1,4 @@
-# Plugin code (version 1.0)
+# Plugin code
 
 To install, copy this directory (not just the contents) to 
 `python/plugins/` in the current active profile,
