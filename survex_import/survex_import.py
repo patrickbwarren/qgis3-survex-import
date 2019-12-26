@@ -33,10 +33,11 @@ from qgis.core import QgsVectorFileWriter, QgsMessageLog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
+
 # Import the code for the dialog
 from .survex_import_dialog import SurvexImportDialog
 
-from struct import unpack # from binary, read from .3d file
+from struct import unpack # used to read binary from .3d file
 from re import search # for matching and extracting substrings
 from math import log10, floor, sqrt
 
@@ -420,7 +421,7 @@ class SurvexImport:
                 if flag & 0x80: # abort if extended elevation
                     raise IOError("Can't deal with extended elevation in " + survex_3d)
 
-                # All front-end data read in, now read byte-wise
+                # All file-wide header data read in, now read byte-wise
                 # according to .3d spec.  Note that all elements must
                 # be processed, in order, otherwise we get out of sync.
 
@@ -631,7 +632,7 @@ class SurvexImport:
                     # integer and the test for a plumb is safely dh2 = 0.
 
                     # The directions are unit vectors optionally weighted by
-                    # cos(inclination) = dh/dl where dh^2 = dx^2 + dy^2 + dz^2
+                    # cos(inclination) = dh/dl where dh^2 = dx^2 + dy^2 (note, no dz^2),
                     # and dl^2 = dh^2 + dz^2.  The normalisation is correspondingly
                     # either 1/dh, or 1/dh * dh/dl = 1/dl.
 
@@ -795,7 +796,7 @@ class SurvexImport:
                         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
                     options, writer = None, None
 
-        # End of if result (what happens if user pressed OK)
+        # End of 'if result:' (what happens if user pressed OK)
 
     # End of run function definition
 
