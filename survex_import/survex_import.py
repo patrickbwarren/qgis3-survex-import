@@ -66,17 +66,17 @@ class SurvexImport:
 
     error_fields = ('ERROR_VERT', 'ERROR_HORIZ', 'ERROR', 'LENGTH')
 
-    # map from QGIS geometry type to OGR geometry type with z dimension
+    # main data structures
 
     leg_list = [] # accumulates legs + metadata
     station_list = [] # ditto stations
     xsect_list = [] # ditto for cross sections for walls
-
     station_xyz = {} # map station names to xyz coordinates
+
+    # useful globals
 
     epsg = None # used to set layer CRS in memory provider
     title = '' # used to set layer title in memory provider
-
     path_3d = '' # to remember the path to the survex .3d file
     path_gpkg = '' # ditto for path to save GeoPackage (.gpkg)
 
@@ -282,7 +282,7 @@ class SurvexImport:
         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
         return layer
 
-# The next two routines are to do with reading .3d binary file format
+# The next three routines are to do with reading .3d binary file format
 
     def read_xyz(self, fp):
         """Read xyz as integers, according to .3d spec"""
