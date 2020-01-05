@@ -147,7 +147,7 @@ situation.
 
 _TL;DR: if in doubt try first with the 'use clino weights' option selected._
 
-Note that passage wall data is _inferred_ and any resemblence to 
+Note that passage wall data is _inferred_ and any resemblance to 
 reality may be pure coincidence: if in doubt, use splays!
 
 ### What to do next
@@ -267,7 +267,7 @@ Further notes on cave surveying and GIS are in
 
 ### Copying
 
-Code in this repository is licensed under GLP v2:
+Code in this repository is licensed under GPL v2:
 
 This program is free software: you can redistribute it and / or modify
 it under the terms of the GNU General Public License as published by
