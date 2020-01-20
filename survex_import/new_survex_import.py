@@ -38,7 +38,7 @@ from .resources import *
 # Import the code for the dialog
 from .survex_import_dialog import SurvexImportDialog
 
-from struct import unpack # from binary, read from .3d file
+from struct import unpack # used to read binary from .3d file
 from re import search # for matching and extracting substrings
 from math import log10, floor, sqrt
 
@@ -68,7 +68,7 @@ class SurvexImport:
 
     error_fields = ('ERROR_VERT', 'ERROR_HORIZ', 'ERROR', 'LENGTH')
 
-    # map from QGIS geometry type to OGR geometry type with z dimension
+    # main data structures
 
     leg_list = [] # accumulates legs + metadata
     station_list = [] # ditto stations
@@ -131,7 +131,6 @@ class SurvexImport:
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('SurvexImport', message)
-
 
     def add_action(
         self,
@@ -220,7 +219,6 @@ class SurvexImport:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -252,18 +250,6 @@ class SurvexImport:
         self.dlg.selectedGPKG.setText(file_gpkg)
         self.path_gpkg = QFileInfo(file_gpkg).path() # memorise path selection
 
-    def add_layer(self, subtitle, geom):
-        """Add a memory layer with title(subtitle) and geom"""
-        name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
-        layer =  QgsVectorLayer(geom, name, 'memory')
-        if self.crs: # this should have been set by now
-            layer.setCrs(self.crs)
-        if not layer.isValid():
-            raise Exception("Invalid layer with %s" % geom)
-        msg = "Memory layer '%s' called '%s' added" % (geom, name)
-        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
-        return layer
-
     def set_crs(self, s):
         """Figure out the CRS for layer creation, from the selected options and/or string"""
         if self.dlg.CRSFromProject.isChecked():
@@ -287,12 +273,24 @@ class SurvexImport:
             msg = 'CRS {} : {}'.format(self.crs_source, self.crs.authid())
             QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
             QgsMessageLog.logMessage(self.crs.description(), tag='Import .3d', level=Qgis.Info)
-        else:
+        else: # hopefully never happens
             msg = "CRS invalid!"
             QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
             self.crs = None
 
-# The next two routines are to do with reading .3d binary file format
+    def add_layer(self, subtitle, geom):
+        """Add a memory layer with title(subtitle) and geom"""
+        name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
+        layer =  QgsVectorLayer(geom, name, 'memory')
+        if self.crs: # this should have been set by now
+            layer.setCrs(self.crs)
+        if not layer.isValid():
+            raise Exception("Invalid layer with %s" % geom)
+        msg = "Memory layer '%s' called '%s' added" % (geom, name)
+        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+        return layer
+
+# The next three routines are to do with reading .3d binary file format
 
     def read_xyz(self, fp):
         """Read xyz as integers, according to .3d spec"""
@@ -323,22 +321,18 @@ class SurvexImport:
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
+
         if self.first_start == True:
             self.first_start = False
             self.dlg = SurvexImportDialog()
-
             self.dlg.selectedFile.clear()
             self.dlg.fileSelector.clicked.connect(self.select_3d_file)
-
             self.dlg.selectedGPKG.clear()
             self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
-
             self.dlg.CRSFromProject.setChecked(False)
             self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
-
             self.dlg.CRSFromFile.setChecked(False)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
-
 
         self.dlg.show() # show the dialog
 
@@ -418,7 +412,7 @@ class SurvexImport:
                 if flag & 0x80: # abort if extended elevation
                     raise IOError("Can't deal with extended elevation in " + survex_3d)
 
-                # All front-end data read in, now read byte-wise
+                # All file-wide header data read in, now read byte-wise
                 # according to .3d spec.  Note that all elements must
                 # be processed, in order, otherwise we get out of sync.
 
@@ -629,7 +623,7 @@ class SurvexImport:
                     # integer and the test for a plumb is safely dh2 = 0.
 
                     # The directions are unit vectors optionally weighted by
-                    # cos(inclination) = dh/dl where dh^2 = dx^2 + dy^2 + dz^2
+                    # cos(inclination) = dh/dl where dh^2 = dx^2 + dy^2 (note, no dz^2),
                     # and dl^2 = dh^2 + dz^2.  The normalisation is correspondingly
                     # either 1/dh, or 1/dh * dh/dl = 1/dl.
 
@@ -793,7 +787,7 @@ class SurvexImport:
                         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
                     options, writer = None, None
 
-        # End of if result (what happens if user pressed OK)
+        # End of 'if result:' (what happens if user pressed OK)
 
     # End of run function definition
 
