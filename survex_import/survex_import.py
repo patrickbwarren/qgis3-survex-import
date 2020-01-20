@@ -30,10 +30,11 @@ from qgis.core import Qgis
 from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
 from qgis.core import QgsPoint, QgsLineString, QgsPolygon
 from qgis.core import QgsVectorFileWriter, QgsMessageLog
+from qgis.core import QgsCoordinateReferenceSystem
+from qgis.gui import QgsProjectionSelectionDialog
 
 # Initialize Qt resources from file resources.py
 from .resources import *
-
 # Import the code for the dialog
 from .survex_import_dialog import SurvexImportDialog
 
@@ -72,12 +73,13 @@ class SurvexImport:
     leg_list = [] # accumulates legs + metadata
     station_list = [] # ditto stations
     xsect_list = [] # ditto for cross sections for walls
+
     station_xyz = {} # map station names to xyz coordinates
 
-    # useful globals
-
-    epsg = None # used to set layer CRS in memory provider
+    crs = None # used to set layer CRS in memory provider
+    crs_source = None # records the origin of the CRS
     title = '' # used to set layer title in memory provider
+
     path_3d = '' # to remember the path to the survex .3d file
     path_gpkg = '' # ditto for path to save GeoPackage (.gpkg)
 
@@ -129,7 +131,6 @@ class SurvexImport:
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('SurvexImport', message)
-
 
     def add_action(
         self,
@@ -218,7 +219,6 @@ class SurvexImport:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -250,36 +250,43 @@ class SurvexImport:
         self.dlg.selectedGPKG.setText(file_gpkg)
         self.path_gpkg = QFileInfo(file_gpkg).path() # memorise path selection
 
-    # First try to extract an explicit EPSG number, otherwise try
-    # assuming the string is PROJ.4.  The reason for this somewhat
-    # convoluted route is to ensure if there is an EPSG number in the
-    # passed string, it is returned 'as is' and not transmuted into
-    # another EPSG number with ostensibly the same CRS.
-
-    def extract_epsg(self, s):
-        """Extract EPSG number from string"""
-        srs = osr.SpatialReference()
-        match = search('epsg:([0-9]*)', s)
-        if match:
-            return_code = srs.ImportFromEPSG(int(match.group(1)))
-        else:
-            return_code = srs.ImportFromProj4(s)
-        if return_code:
-            raise Exception("Invalid proj4 string: " + s)
-        code = srs.GetAttrValue('AUTHORITY', 1)
-        srs = None
-        self.epsg = int(code)
-        msg = "%s --> EPSG:%i" % (s, self.epsg)
-        QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+    def set_crs(self, s):
+        """Figure out the CRS for layer creation, from the selected options and/or string"""
+        if self.dlg.CRSFromProject.isChecked():
+            self.crs_source = 'from project'
+            self.crs = QgsProject.instance().crs()
+        elif self.dlg.CRSFromFile.isChecked() and s:
+            self.crs_source = 'from .3d file'
+            self.crs = QgsCoordinateReferenceSystem()
+            match = search('epsg:([0-9]*)', s) # check for epsg in proj string
+            if match: # if found, use the EPSG number explicitly
+                self.crs.createFromString('EPSG:{}'.format(int(match.group(1))))
+            else: # fall back to proj4
+                self.crs.createFromProj4(s)
+        else: # fall back to raising a CRS selection dialog
+            self.crs_source = 'from dialog'
+            dialog = QgsProjectionSelectionDialog()
+            dialog.setMessage('define the CRS for the imported layers')
+            dialog.exec() # run the dialog ..
+            self.crs = dialog.crs() # .. and recover the user input
+        if self.crs.isValid():
+            msg = 'CRS {} : {}'.format(self.crs_source, self.crs.authid())
+            QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+            QgsMessageLog.logMessage(self.crs.description(), tag='Import .3d', level=Qgis.Info)
+        else: # hopefully never happens
+            msg = "CRS invalid!"
+            QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
+            self.crs = None
 
     def add_layer(self, subtitle, geom):
-        """Add a memory layer with title and geom, and CRS if epsg defined"""
-        uri = '%s?crs=epsg:%i' % (geom, self.epsg) if self.epsg else geom
-        name = '%s - %s' % (self.title, subtitle) if self.title else subtitle
-        layer =  QgsVectorLayer(uri, name, 'memory')
+        """Add a memory layer with title(subtitle) and geom"""
+        name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
+        layer =  QgsVectorLayer(geom, name, 'memory')
+        if self.crs: # this should have been set by now
+            layer.setCrs(self.crs)
         if not layer.isValid():
-            raise Exception("Invalid layer with %s" % uri)
-        msg = "Memory layer '%s' called '%s' added" % (uri, name)
+            raise Exception("Invalid layer with %s" % geom)
+        msg = "Memory layer '%s' called '%s' added" % (geom, name)
         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
         return layer
 
@@ -314,22 +321,18 @@ class SurvexImport:
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
+
         if self.first_start == True:
             self.first_start = False
             self.dlg = SurvexImportDialog()
-
             self.dlg.selectedFile.clear()
             self.dlg.fileSelector.clicked.connect(self.select_3d_file)
-
             self.dlg.selectedGPKG.clear()
             self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
-
             self.dlg.CRSFromProject.setChecked(False)
             self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
-
             self.dlg.CRSFromFile.setChecked(False)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
-
 
         self.dlg.show() # show the dialog
 
@@ -357,9 +360,6 @@ class SurvexImport:
             include_up_down = self.dlg.IncludeUpDown.isChecked()
 
             discard_features = not self.dlg.KeepFeatures.isChecked()
-
-            get_crs_from_file = self.dlg.CRSFromFile.isChecked()
-            get_crs_from_project = self.dlg.CRSFromProject.isChecked()
 
             if not os.path.exists(survex_3d):
                 raise Exception("File '%s' doesn't exist" % survex_3d)
@@ -398,16 +398,7 @@ class SurvexImport:
                 else:
                     self.title = fields[0].decode('ascii');
 
-                # Try to work out EPSG number from second field if available.
-                # The project_crs should end up as a lowercase string like 'epsg:7405'
-
-                if get_crs_from_project:
-                    project_crs = QgsProject.instance().crs()
-                    self.extract_epsg(project_crs.authid().lower())
-                elif get_crs_from_file and len(fields) > 1:
-                    self.extract_epsg(fields[1].decode('ascii'))
-                else:
-                    self.epsg = None
+                self.set_crs(fields[1].decode('ascii') if len(fields) > 1 else None)
 
                 line = fp.readline().rstrip() # Timestamp, unused in present application
 
@@ -792,7 +783,7 @@ class SurvexImport:
                     options.layerName = str(match.group(1)) if match else layer_name
                     writer = QgsVectorFileWriter.writeAsVectorFormat(layer, gpkg_file, options)
                     if writer:
-                        msg = "'%s' -> %s in %s" % (layer_name, options.layerName, gpkg_file)
+                        msg = "'{}' -> {} in {}".format(layer_name, options.layerName, gpkg_file)
                         QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
                     options, writer = None, None
 
