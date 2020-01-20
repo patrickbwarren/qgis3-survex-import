@@ -4,35 +4,38 @@
 # embedding metadata in __init__.py will 
 # is no longer supported since version 2.0.
 
-# This file should be included when you package your plugin.# Mandatory items:
+# This file should be included when you package your plugin.
+
+# Mandatory items:
 
 [general]
 name=Import .3d file
 qgisMinimumVersion=3.0
 description=Import features from survex .3d files
-version=1.0
+version=1.1
 author=Patrick B Warren
 email=patrickbwarren@gmail.com
-
 about=Import features into vector layers from a survex .3d file.
+tracker=https://github.com/patrickbwarren/qgis3-survex-import
+repository=https://github.com/patrickbwarren/qgis3-survex-import
 
-tracker=http://bugs
-repository=http://repo
 # End of mandatory metadata
 
 # Recommended items:
 
-# Uncomment the following line and add your changelog:
-# changelog=
+changelog=GitHub repository release versions
+    1.1 (current) - minor updates, tagged for packaging
+    1.0 - migrated and updated from QGIS 2.18 plugin
 
 # Tags are comma separated with spaces allowed
 tags=python
 
-homepage=http://homepage
+homepage=https://github.com/patrickbwarren/qgis3-survex-import
 category=Vector
 icon=icon.png
-# experimental flag
-experimental=True
+
+# experimental flag (currently quite extensively tested)
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
