@@ -7,8 +7,8 @@
 * no dependencies, natively reads binary v8 format survex .3d files;
 * import stations and legs with full metadata;
 * create passage walls, cross-sections, and polygons from LRUD data;
-* all features have _z_ dimensions, and elevations to assist coloring;
-* co-ordinate system can be set from a proj4 string embedded in .3d file;
+* all features have _z_ dimensions, and (mean) elevations to assist coloring;
+* the co-ordinate system can be set from a proj4 string embedded in .3d file;
 * results can be saved immediately into a GeoPackage shape file.
 
 ### Installation
@@ -44,7 +44,7 @@ window for the user to select a .3d file with a number of options:
     - as walls;
     - as cross sections;
     - as traverses, showing the centrelines used for above;
-* Set the co-ordinate reference system (CRS)
+* Optionally, set the co-ordinate reference system (CRS)
   from .3d file or inherit from QGIS3 project;
 * Keep features from previous import(s) (optional);
 * Select a GeoPackage (.gpkg) file to save results (optional).
