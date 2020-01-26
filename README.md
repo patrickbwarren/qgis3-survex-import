@@ -1,15 +1,15 @@
 # QGIS3 plugin to import survex .3d files
 
-#### For the QGIS 2 plugin visit https://github.com/patrickbwarren/qgis-survex-import
+#### _For the old QGIS 2 plugin visit https://github.com/patrickbwarren/qgis-survex-import_
 
 ### Features
 
 * no dependencies, natively reads binary v8 format survex .3d files;
 * import stations and legs with full metadata;
 * create passage walls, cross-sections, and polygons from LRUD data;
-* all features have _z_ dimensions, and (mean) elevations to assist coloring;
-* CRS can be set from PROJ.4 string embedded in .3d file;
-* results can be saved immediately into a GeoPackage (.gpkg) shapefile.
+* all features have _z_ dimensions, and elevations to assist coloring;
+* co-ordinate system can be set from a proj4 string embedded in .3d file;
+* results can be saved immediately into a GeoPackage shape file.
 
 ### Installation
 
@@ -38,13 +38,15 @@ window for the user to select a .3d file with a number of options:
 
 * Import legs, with options to include splay, duplicate, and surface legs;
 * Import stations, with the option to include surface stations (\*);
-* Import passage data computed from LRUDs, with the option to use clino weights (see below):
+* Import passage data computed from LRUDs, with the option to use 
+  clino weights (see below):
     - as polygons, with an option to include mean up / down data;
     - as walls;
     - as cross sections;
     - as traverses, showing the centrelines used for above;
-* Get CRS from .3d file, or inherit from QGIS3 project;
-* Keep features from previous import(s);
+* Set the co-ordinate reference system (CRS)
+  from .3d file or inherit from QGIS3 project;
+* Keep features from previous import(s) (optional);
 * Select a GeoPackage (.gpkg) file to save results (optional).
   
 (\*) In rare cases a station may be flagged both surface and
@@ -56,6 +58,10 @@ features as desired.  Legs, walls, cross sections, and traverses are
 imported as line strings in separate vector layers for convenience.
 All created layers are saved to the GeoPackage file if requested (any
 existing content is overwritten).
+
+A CRS selector dialog box will appear, if neither of the CRS selector options 
+are checked, or if CRS from .3d file is selected but there is no CRS in the .3d 
+file.
 
 If 'keep features' is selected, then previously imported features are
 not discarded, and the newly-created layers will contain both the
@@ -149,6 +155,71 @@ _TL;DR: if in doubt try first with the 'use clino weights' option selected._
 
 Note that passage wall data is _inferred_ and any resemblance to 
 reality may be pure coincidence: if in doubt, use splays!
+
+#### Co-ordinate reference systems (CRS)
+
+To be integrated with other sources of geographical information such as 
+maps, GPS tracks, and so on, an imported survey should be _georeferenced_, which 
+means the _spatial reference system_ (SRS) should be specified; 
+in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).  
+
+The easiest way to do this is to use survex `*cs` commands in the .svx file to 
+set an output CRS in the .3d file, 
+then select 'CRS from .3d file' in the import 
+dialog.  For example the `DowProv.svx` file in the examples contains
+
+```
+*cs OSGB:SD
+*cs out EPSG:7405
+```
+which specifies that the entrance `*fix`'s are in the Ordnance Survey SD grid 
+square, and that the output  should use the Ordnance Survey all-numeric 
+British National Grid (EPSG:7405).  
+
+If one only has access to the .3d file (for example, it is provided 'as is' 
+without source data), one can check for a CRS by using `dump3d`: look for an 
+entry near the top which begins 'CS'.  For example `DowProv.3d` contains 
+
+```
+CS +init=epsg:7405 +no_defs
+```
+This is in fact a proj4 string that specifies the CRS.
+Note that if an EPSG number is specified in the CS string, the input filter uses that
+to fix the CRS.  Otherwise, a CRS is created using the proj4 string directly.
+
+If the .3d file does not 
+contain this information, the input filter will fall back onto a CRS selector
+dialog.  In such cases, it may be helpful to create a user-defined CRS 
+such as for an Ordnance Survey 100km x 100km square.  For example, for the 
+SD square, create a custom CRS in QGIS with the following proj4 string
+
+```
++proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 
++x_0=100000 +y_0=-500000 +ellps=airy 
++towgs84=375,-111,431,0,0,0,0 +units=m +vunits=m +no_defs
+```
+(all on one line).  This is identical to the proj4 string for the British
+National Grid (EPSG:7405) except that the `+x_0` and `+y_0` entries 
+have been shifted to the origin of the SD square.
+
+Another example is Austria for which many of the older cave entrances are 
+recorded using a truncated form of the MGI / Austria Gauss-Krüger (GK) Central 
+SRS (EPSG:31255),
+
+```
++proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 
++x_0=0 +y_0=-5200000 +ellps=bessel 
++towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
+```
+(again this should be all on one line).
+
+For more details and examples of survex `*cs` commands see 
+[cave_surveying_and_gis.pdf](cave_surveying_and_gis.pdf) in the present 
+repository.
+
+In-depth explanations of co-ordinate reference systems can be found in the 
+Ordnance Survey booklet entitled _A Guide to Coordinate Systems in 
+Great Britain_ which can be found on the Ordnance Survey website.
 
 ### What to do next
 
