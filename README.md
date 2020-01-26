@@ -1,6 +1,7 @@
 # QGIS3 plugin to import survex .3d files
 
-#### _For the old QGIS 2 plugin visit https://github.com/patrickbwarren/qgis-survex-import_
+#### _For the older QGIS 2 plugin visit
+https://github.com/patrickbwarren/qgis-survex-import_
 
 ### Features
 
