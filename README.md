@@ -360,4 +360,4 @@ The .3d file parser is based on a GPL v2 library to handle Survex 3D files (`*.3
 copyright &copy; 2008-2012 Thomas Holder, http://sf.net/users/speleo3/; 
 see https://github.com/speleo3/inkscape-speleo.
 
-Modifications and extensions copyright &copy; (2018-2019) Patrick B Warren.
+Modifications and extensions copyright &copy; (2018-2020) Patrick B Warren.

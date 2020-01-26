@@ -1,10 +1,13 @@
-# This file contains metadata for your plugin. Since 
-# version 2.0 of QGIS this is the proper way to supply 
-# information about a plugin. The old method of 
-# embedding metadata in __init__.py will 
-# is no longer supported since version 2.0.
+# This file contains metadata for the QGIS3 survex .3d import filter plugin.
 
-# This file should be included when you package your plugin.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# Copyright (2018-2020) Patrick B Warren (patrickbwarren@gmail.com)
+
+# See https://github.com/patrickbwarren/qgis3-survex-import 
 
 # Mandatory items:
 
@@ -12,19 +15,16 @@
 name=Import .3d file
 qgisMinimumVersion=3.0
 description=Import features from survex .3d files
-version=1.1
+version=1.2
 author=Patrick B Warren
 email=patrickbwarren@gmail.com
 about=Import features into vector layers from a survex .3d file.
 tracker=https://github.com/patrickbwarren/qgis3-survex-import
 repository=https://github.com/patrickbwarren/qgis3-survex-import
 
-# End of mandatory metadata
-
-# Recommended items:
-
 changelog=GitHub repository release versions
-    1.1 (current) - minor updates, tagged for packaging
+    1.2 (current) - fixed CRS import methods
+    1.1 - minor updates, tagged for packaging
     1.0 - migrated and updated from QGIS 2.18 plugin
 
 # Tags are comma separated with spaces allowed
@@ -34,9 +34,7 @@ homepage=https://github.com/patrickbwarren/qgis3-survex-import
 category=Vector
 icon=icon.png
 
-# experimental flag (currently quite extensively tested)
 experimental=False
 
-# deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
 

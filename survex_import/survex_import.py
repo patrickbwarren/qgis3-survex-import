@@ -8,7 +8,7 @@
                               -------------------
         begin                : 2019-05-03
         git sha              : $Format:%H$
-        copyright            : (C) 2019 by Patrick B Warren
+        copyright            : (C) 2019-2020 by Patrick B Warren
         email                : patrickbwarren@gmail.com
  ***************************************************************************/
 
