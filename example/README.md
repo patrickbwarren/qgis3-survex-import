@@ -14,5 +14,4 @@ to look at them.  The processed data is [`DowProv.3d`](DowProv.3d), generated us
 survex 1.2.38.
 
 For more details see
-[`cave_surveying_and_GIS.pdf`](../docs/cave_surveying_and_GIS.pdf)
-in the `docs` directory.
+[`cave_surveying_and_GIS.pdf`](../cave_surveying_and_GIS.pdf).
