@@ -122,17 +122,6 @@ MEAN_UP and MEAN_DOWN attributes in addition to ELEVATION.  These are
 computed from the LRUD data for the two stations at either end of the
 leg.  They can be used in 3d work (see end).
 
-For the most part importing the CRS from the .3d file should work as
-expected if the survey data has been georeferenced using the survex
-`*cs` and `*cs out` commands.  If it doesn't work, or this information
-isn't present, one can instead inherit the CRS from the current QGIS3
-project.  If neither of these options is selected, a CRS dialog box
-may appear for each layer, or a default CRS will be chosen
-automatically, depending on the system-wide QGIS3 settings.
-To maximise the likelihood that CRS import from .3d file works as
-expected, use an EPSG code in the `*cs out` survex command rather than
-a PROJ.4 string.
-
 #### Passage walls
 
 Passage walls (as line strings), polygons, and cross sections (as
