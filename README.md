@@ -170,9 +170,9 @@ reality may be pure coincidence: if in doubt, use splays!
 To be integrated with other sources of geographical information such as 
 maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This 
 means that the _spatial reference system_ (SRS) should be specified; 
-in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).  
-
-The easiest way to do this is to use survex `*cs` commands in the .svx file to 
+in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).
+The easiest way to do this is to use survex `*cs` and `*cs out` 
+commands in the .svx file to 
 set an output CRS in the .3d file, then select 'CRS from .3d file' in the import 
 dialog.  
 
