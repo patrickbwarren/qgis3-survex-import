@@ -185,17 +185,16 @@ means that the _spatial reference system_ (SRS) should be specified;
 in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).  
 
 The easiest way to do this is to use survex `*cs` commands in the .svx file to 
-set an output CRS in the .3d file, 
-then select 'CRS from .3d file' in the import 
+set an output CRS in the .3d file, then select 'CRS from .3d file' in the import 
 dialog.  
 
-For example the `DowProv.svx` file in the examples contains
+For example `DowProv.svx` in the examples contains
 
 ```
 *cs OSGB:SD
 *cs out EPSG:7405
 ```
-which specifies that the entrance `*fix`'s are in the Ordnance Survey (OS) SD grid 
+This specifies that the entrance `*fix`'s are in the Ordnance Survey (OS) SD grid 
 square, and that the output  should use the all-numeric 
 British National Grid (EPSG:7405).  
 
@@ -206,7 +205,7 @@ Using `dump3d` to inspect
 CS +init=epsg:7405 +no_defs
 ```
 It is this CS proj4 string in the .3d file 
-that the input filter uses to specify the CRS: 
+that the input filter uses to identify the CRS: 
 if the string contains an EPSG number then the input filter uses that
 to fix the CRS; otherwise a CRS is created using the proj4 string directly.
 
@@ -218,14 +217,15 @@ dialog.
 In some cases
 it may be helpful to create beforehand a user-defined CRS to select in the
 import dialog.  An example could be if the .3d file does not contain a CS proj4 
-string, and the actual co-ordinates are in some known but non-standard SRS, such as
+string, but the actual co-ordinates are in some known but non-standard SRS, such as
 a truncated numerical scheme.
 
 For example, the entrances to the Dow-Providence system are specified as `*fix`'s
-relative to the OS 100km x 100km SD grid square.  If one omits the `*cs` commands in the
-.svx file, the resulting .3d file would therefore lack a proj4 string.
-It can however be imported into QGIS3 by first creating 
-a custom CRS in QGIS for the OS SD square, then importing the .3d file 
+relative to the OS 100km x 100km SD grid square.  If the `*cs` commands are 
+omitted in the .svx file, the resulting .3d file lacks a proj4 string and 
+all co-ordinates are relative to the OS SD grid square.  This .3d file can 
+nevertheless still be imported into QGIS3 by first creating 
+a custom CRS in QGIS for the OS SD square, then
 specifying this custom CRS in the import dialog (or inheriting from the project 
 CRS if that is set appropriately).  
 
@@ -241,10 +241,10 @@ CRS can be created from the following proj4 string
 National Grid (EPSG:7405) except that the `+x_0` and `+y_0` entries 
 have been shifted to the origin of the SD square.
 
-Another example is Loser plateau data in Austria that accompanies the
+Another example is the Loser plateau data in Austria that accompanies the
 survex distribution as sample data.  Many of the older cave entrances are 
-recorded using a truncated form of the MGI / Austria Gauss-Krüger (GK) Central 
-SRS (EPSG:31255).  This corresponds to a proj4 string
+recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
+SRS (EPSG:31255).  This truncated SRS corresponds to a proj4 string
 
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 
@@ -252,7 +252,7 @@ SRS (EPSG:31255).  This corresponds to a proj4 string
 +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
 (again this should be all on one line).  Thus, reduced cave data in the
-truncated GK Central SRS can be imported by first creating a custom CRS with the
+truncated GK Central Austria SRS can be imported by first creating a custom CRS with the
 above proj4 string.
 
 For more details and examples of survex `*cs` commands see 
