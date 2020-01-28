@@ -165,7 +165,7 @@ _TL;DR: if in doubt try first with the 'use clino weights' option selected._
 Note that passage wall data is _inferred_ and any resemblance to 
 reality may be pure coincidence: if in doubt, use splays!
 
-#### Co-ordinate reference systems (CRS)
+#### Co-ordinate reference system (CRS)
 
 To be integrated with other sources of geographical information such as 
 maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This 
@@ -228,15 +228,14 @@ CRS can be created from the following proj4 string
 ```
 (all on one line).  This is identical to the proj4 string for the British
 National Grid 
-([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)).  
 except that the `+x_0` and `+y_0` entries 
 have been shifted to a new false origin for the SD grid square.
 
-Another example is the Loser plateau data in Austria that accompanies the
+Another example is the Austrian Loser plateau data that accompanies the
 survex distribution as sample data.  Many of the cave entrances are 
 recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
-SRS (the non-truncated form is 
-[EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).  
+SRS (the non-truncated form is
+[EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).
 This truncated SRS corresponds to a proj4 string
 
 ```
@@ -245,10 +244,10 @@ This truncated SRS corresponds to a proj4 string
 +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
 (again this should be all on one line).
-This is derived from the proj4 string for 
+This is derived from the proj4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 by changing the `+y_0` entry.
-With a custom CRS created using the above proj4 string, reduced cave data in the
+With a custom CRS created using the above proj4 string, cave data in the
 truncated GK Central Austria SRS can be imported without having to 
 introduce `*cs` commands in .svx files.
 
