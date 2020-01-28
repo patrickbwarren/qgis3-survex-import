@@ -206,10 +206,7 @@ dialog.
 
 In some cases
 it may be helpful to create beforehand a user-defined CRS to select in the
-import dialog.  An example could be if the .3d file does not contain a CS proj4 
-string, and the `*fix`'s are in some known but non-standard SRS, such as
-a truncated numerical scheme.
-
+import dialog.
 For example, if the `*cs` commands are 
 omitted from `DowProv.svx`, the resulting .3d file lacks a proj4 string and 
 all co-ordinates are relative to the OS SD grid square.  This .3d file can 
