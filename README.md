@@ -259,8 +259,12 @@ Great Britain_ which can be found on the Ordnance Survey website.
 _TL;DR: for optimal use, specify the CRS using `*cs out` with an EPSG number._
 
 Also, choose a *metric* co-ordinate system, such as the British National Grid
-([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)).  
-or a WGS84 UTM zone (EPSG 32601 ... 32660 for N; 32701 ... 32760 for S).
+([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
+or a WGS 84 UTM zone (
+[EPSG:32601](https://spatialreference.org/ref/epsg/32601/) ... 
+[EPSG:32660](https://spatialreference.org/ref/epsg/32660/) for N;
+[EPSG:32701](https://spatialreference.org/ref/epsg/32701/) ... 
+[EPSG:32760](https://spatialreference.org/ref/epsg/32760/) for S).
 
 ### What to do next
 
