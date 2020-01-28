@@ -180,40 +180,57 @@ reality may be pure coincidence: if in doubt, use splays!
 #### Co-ordinate reference systems (CRS)
 
 To be integrated with other sources of geographical information such as 
-maps, GPS tracks, and so on, an imported survey should be _georeferenced_, which 
-means the _spatial reference system_ (SRS) should be specified; 
+maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This 
+means that the _spatial reference system_ (SRS) should be specified; 
 in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).  
 
 The easiest way to do this is to use survex `*cs` commands in the .svx file to 
 set an output CRS in the .3d file, 
 then select 'CRS from .3d file' in the import 
-dialog.  For example the `DowProv.svx` file in the examples contains
+dialog.  
+
+For example the `DowProv.svx` file in the examples contains
 
 ```
 *cs OSGB:SD
 *cs out EPSG:7405
 ```
-which specifies that the entrance `*fix`'s are in the Ordnance Survey SD grid 
-square, and that the output  should use the Ordnance Survey all-numeric 
+which specifies that the entrance `*fix`'s are in the Ordnance Survey (OS) SD grid 
+square, and that the output  should use the all-numeric 
 British National Grid (EPSG:7405).  
 
-If one only has access to the .3d file (for example, it is provided 'as is' 
-without source data), one can check for a CRS by using `dump3d`: look for an 
-entry near the top which begins 'CS'.  For example `DowProv.3d` contains 
+Using `dump3d` to inspect
+`DowProv.3d`, one finds the line
 
 ```
 CS +init=epsg:7405 +no_defs
 ```
-This is in fact a proj4 string that specifies the CRS.
-Note that if an EPSG number is specified in the CS string, the input filter uses that
-to fix the CRS.  Otherwise, a CRS is created using the proj4 string directly.
+It is this CS proj4 string in the .3d file 
+that the input filter uses to specify the CRS: 
+if the string contains an EPSG number then the input filter uses that
+to fix the CRS; otherwise a CRS is created using the proj4 string directly.
+
 If the .3d file does not 
-contain this information, the input filter will fall back onto a CRS selector
+contain a CS proj4 string (if for example it was generated without `*cs` commands in the 
+source .svx files), then the input filter fall backs onto a CRS selector
 dialog.  
 
-In some cases, it may be helpful to create a user-defined CRS 
-such as for an Ordnance Survey 100km x 100km square.  For example, for the 
-SD square, create a custom CRS in QGIS with the following proj4 string
+In some cases
+it may be helpful to create beforehand a user-defined CRS to select in the
+import dialog.  An example could be if the .3d file does not contain a CS proj4 
+string, and the actual co-ordinates are in some known but non-standard SRS, such as
+a truncated numerical scheme.
+
+For example, the entrances to the Dow-Providence system are specified as `*fix`'s
+relative to the OS 100km x 100km SD grid square.  If one omits the `*cs` commands in the
+.svx file, the resulting .3d file would therefore lack a proj4 string.
+It can however be imported into QGIS3 by first creating 
+a custom CRS in QGIS for the OS SD square, then importing the .3d file 
+specifying this custom CRS in the import dialog (or inheriting from the project 
+CRS if that is set appropriately).  
+
+For the OS SD square, the requisite custom 
+CRS can be created from the following proj4 string
 
 ```
 +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 
@@ -224,16 +241,19 @@ SD square, create a custom CRS in QGIS with the following proj4 string
 National Grid (EPSG:7405) except that the `+x_0` and `+y_0` entries 
 have been shifted to the origin of the SD square.
 
-Another example is Austria for which many of the older cave entrances are 
+Another example is Loser plateau data in Austria that accompanies the
+survex distribution as sample data.  Many of the older cave entrances are 
 recorded using a truncated form of the MGI / Austria Gauss-Krüger (GK) Central 
-SRS (EPSG:31255),
+SRS (EPSG:31255).  This corresponds to a proj4 string
 
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 
 +x_0=0 +y_0=-5200000 +ellps=bessel 
 +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
-(again this should be all on one line).
+(again this should be all on one line).  Thus, reduced cave data in the
+truncated GK Central SRS can be imported by first creating a custom CRS with the
+above proj4 string.
 
 For more details and examples of survex `*cs` commands see 
 [cave_surveying_and_gis.pdf](cave_surveying_and_gis.pdf) in the present 
