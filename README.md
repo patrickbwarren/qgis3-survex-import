@@ -256,6 +256,12 @@ In-depth explanations of co-ordinate reference systems can be found in the
 Ordnance Survey booklet entitled _A Guide to Coordinate Systems in 
 Great Britain_ which can be found on the Ordnance Survey website.
 
+_TL;DR: for optimal use, specify the CRS using `*cs out` with an EPSG number._
+
+Also, choose a *metric* co-ordinate system, such as the British National Grid
+([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)).  
+or a WGS84 UTM zone (EPSG 32601 ... 32660 for N; 32701 ... 32760 for S).
+
 ### What to do next
 
 Once the data is in QGIS3 one can do various things with it.
