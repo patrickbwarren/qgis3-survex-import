@@ -176,7 +176,7 @@ commands in the .svx file to
 set an output CRS in the .3d file, then select 'CRS from .3d file' in the import 
 dialog.  
 
-For example `DowProv.svx` in the examples contains
+For example `DowProv.svx` contains
 
 ```
 *cs OSGB:SD
@@ -187,7 +187,7 @@ square, and that the output  should use the all-numeric
 British National Grid (EPSG:7405).  
 
 Using `dump3d` to inspect
-`DowProv.3d`, one finds the line
+`DowProv.3d` one finds the line
 
 ```
 CS +init=epsg:7405 +no_defs
@@ -196,24 +196,23 @@ It is this CS proj4 string in the .3d file
 that the input filter uses to identify the CRS: 
 if the string contains an EPSG number then the input filter uses that
 to fix the CRS; otherwise a CRS is created using the proj4 string directly.
-
 If the .3d file does not 
-contain a CS proj4 string (if for example it was generated without `*cs` commands in the 
+contain a CS proj4 string (it was generated without `*cs` commands in the 
 source .svx files), then the input filter fall backs onto a CRS selector
 dialog.  
 
 In some cases
 it may be helpful to create beforehand a user-defined CRS to select in the
 import dialog.  An example could be if the .3d file does not contain a CS proj4 
-string, but the actual co-ordinates are in some known but non-standard SRS, such as
+string, and the actual co-ordinates are in some known but non-standard SRS, such as
 a truncated numerical scheme.
 
 For example, the entrances to the Dow-Providence system are specified as `*fix`'s
 relative to the OS 100km x 100km SD grid square.  If the `*cs` commands are 
-omitted in the .svx file, the resulting .3d file lacks a proj4 string and 
+omitted from `DowProv.svx`, the resulting .3d file lacks a proj4 string and 
 all co-ordinates are relative to the OS SD grid square.  This .3d file can 
 nevertheless still be imported into QGIS3 by first creating 
-a custom CRS in QGIS for the OS SD square, then
+a custom CRS for the OS SD square, then
 specifying this custom CRS in the import dialog (or inheriting from the project 
 CRS if that is set appropriately).  
 
@@ -230,7 +229,7 @@ National Grid (EPSG:7405) except that the `+x_0` and `+y_0` entries
 have been shifted to the origin of the SD square.
 
 Another example is the Loser plateau data in Austria that accompanies the
-survex distribution as sample data.  Many of the older cave entrances are 
+survex distribution as sample data.  Many of the cave entrances are 
 recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
 SRS (EPSG:31255).  This truncated SRS corresponds to a proj4 string
 
