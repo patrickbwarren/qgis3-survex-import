@@ -198,11 +198,10 @@ This is a [proj4](https://en.wikipedia.org/wiki/PROJ) string
 embedded in the .3d file.  The input filter uses this to identify the CRS: 
 if the string contains an 
 [EPSG](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset) 
-number then the input filter uses that
-to fix the CRS; otherwise a CRS is created using the proj4 string directly.
+number then that determines
+the CRS; otherwise a CRS is created using the proj4 string directly.
 If the .3d file does not 
-contain a CS proj4 string (it was generated without `*cs` commands in the 
-source .svx files), then the input filter fall backs onto a CRS selector
+contain a CS proj4 string then the input filter fall backs onto a CRS selector
 dialog.  
 
 In some cases
@@ -245,9 +244,6 @@ This truncated SRS corresponds to a proj4 string
 This is derived from the proj4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 by changing the `+y_0` entry.
-With a custom CRS created using the above proj4 string, cave data in the
-truncated GK Central Austria SRS can be imported without having to 
-introduce `*cs` commands in .svx files.
 
 For more details and examples of survex `*cs` commands see 
 [cave_surveying_and_gis.pdf](cave_surveying_and_gis.pdf) in the present 
@@ -263,9 +259,9 @@ Also, choose a *metric* co-ordinate system, such as the British National Grid
 ([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
 or a WGS 84 UTM zone
 ([EPSG:32601](https://spatialreference.org/ref/epsg/32601/) ... 
-[EPSG:32660](https://spatialreference.org/ref/epsg/32660/) for N;
+[EPSG:32660](https://spatialreference.org/ref/epsg/32660/);
 [EPSG:32701](https://spatialreference.org/ref/epsg/32701/) ... 
-[EPSG:32760](https://spatialreference.org/ref/epsg/32760/) for S).
+[EPSG:32760](https://spatialreference.org/ref/epsg/32760/)).
 
 ### What to do next
 
