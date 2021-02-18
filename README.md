@@ -183,7 +183,7 @@ For example `DowProv.svx` contains
 *cs OSGB:SD
 *cs out EPSG:7405
 ```
-This specifies that the entrance `*fix`'s are in the Ordnance Survey (OS) 
+This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
 100km x 100km SD grid square, and that the output  should use the all-numeric 
 British National Grid 
 ([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)).  
