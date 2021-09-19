@@ -294,7 +294,7 @@ and the master file \verb}DowProv.svx} contains
 
 \begin{verbatim}
 *cs OSGB:SD
-*cs out EPSG:7405
+*cs out EPSG:27700
 ...
 *begin DowProv
 *include DowCave
@@ -313,7 +313,7 @@ by field work. Then the file \verb}DowProv.svx} specifies input SRS is
 the SD square, and asks that the reduced data should be exported
 using the all-numeric British National Grid scheme, here codified with 
 \href{http://spatialreference.org/}{European Petroleum Survey Group
-  (EPSG)} code \verb+EPSG:7405+.
+  (EPSG)} code \verb+EPSG:27700+.
 Using EPSG numbers avoids potential misunderstanding when
 importing into a GIS platform, for example in QGIS one can find the
 exact exported SRS easily enough by searching on the EPSG number.
@@ -334,7 +334,7 @@ is robust, clean, and unambiguous. Moreover, the output SRS is included
 as metadata in the \verb}.3d} file; thus with \verb}dump3d} one sees
 
 \begin{verbatim}
-CS +init=epsg:7405 +no_defs
+CS +init=epsg:27700 +no_defs
 \end{verbatim}
 
 (this is in fact a \href{http://proj4.org/}{PROJ.4} string which species
@@ -428,7 +428,7 @@ From the DXF file, the centreline can be extracted by running
 
 \begin{verbatim}
 ogr2ogr -f "ESRI Shapefile" DowProv_centreline.shp DowProv.dxf \
-  -where "Layer='CentreLine'" -a_srs EPSG:7405
+  -where "Layer='CentreLine'" -a_srs EPSG:27700
 \end{verbatim}
 
 We take the opportunity here to add an SRS to match that used in the
@@ -441,7 +441,7 @@ running
 
 \begin{verbatim}
 ogr2ogr -f "ESRI Shapefile" DowProv_stations.shp DowProv.dxf \
-  -where "Layer='Labels'" -a_srs EPSG:7405
+  -where "Layer='Labels'" -a_srs EPSG:27700
 \end{verbatim}
 
 \subsubsection{QGIS import plugins (preferred route)}\label{import-using-qgis-plugin}
@@ -494,6 +494,6 @@ FITNESS FOR A PARTICULAR PURPOSE.
 
 \subsubsection{Copyright}\label{copyright}
 
-Copyright \copyright\ (2017--19) Patrick B Warren.
+Copyright \copyright\ (2017--21) Patrick B Warren.
 
 \end{document}

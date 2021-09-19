@@ -4,6 +4,7 @@
 
 ### Changelog
 
+v1.2.1 - updated EPSG:7405 to EPSG:27700
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
@@ -181,18 +182,20 @@ For example `DowProv.svx` contains
 
 ```
 *cs OSGB:SD
-*cs out EPSG:7405
+*cs out EPSG:27700
 ```
 This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
 100km x 100km SD grid square, and that the output  should use the all-numeric 
 British National Grid 
-([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)).  
+([EPSG:27700](https://spatialreference.org/ref/epsg/27700/)
+(note that [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) is also the British National Grid however
+this EPSG code seems to be deprecated by OS).
 
 Using `dump3d` to inspect
 `DowProv.3d` one finds the line
 
 ```
-CS +init=epsg:7405 +no_defs
+CS +init=epsg:27700 +no_defs
 ```
 This is a [proj4](https://en.wikipedia.org/wiki/PROJ) string
 embedded in the .3d file.  The input filter uses this to identify the CRS: 
@@ -256,7 +259,7 @@ Great Britain_ which can be found on the Ordnance Survey website.
 _TL;DR: for optimal use, specify the CRS using `*cs out` with an EPSG number._
 
 Also, choose a *metric* co-ordinate system, such as the British National Grid
-([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
+([EPSG:27700](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
 or a WGS 84 UTM zone
 ([EPSG:32601](https://spatialreference.org/ref/epsg/32601/) ... 
 [EPSG:32660](https://spatialreference.org/ref/epsg/32660/);
