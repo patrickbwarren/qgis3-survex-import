@@ -1,17 +1,16 @@
 # QGIS3 plugin to import survex .3d files
 
-**Current version 1.2**
+**Current version 1.2.1**
 
 ### Changelog
 
-v1.2.1 - updated EPSG:7405 to EPSG:27700
+v1.2.1 - updated EPSG:7405 to EPSG:27700  
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
 
-
-***For QGIS 2.18 visit
-https://github.com/patrickbwarren/qgis-survex-import***
+***The [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
+is no longer maintained; please switch to QGIS3 !***
 
 ### Features
 
@@ -187,9 +186,9 @@ For example `DowProv.svx` contains
 This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
 100km x 100km SD grid square, and that the output  should use the all-numeric 
 British National Grid 
-([EPSG:27700](https://spatialreference.org/ref/epsg/27700/)
-(note that [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) is also the British National Grid however
-this EPSG code seems to be deprecated by OS).
+([EPSG:27700](https://spatialreference.org/ref/epsg/27700/)).
+Note that [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) is also the British National Grid but
+this EPSG code seems to be deprecated.
 
 Using `dump3d` to inspect
 `DowProv.3d` one finds the line
