@@ -9,9 +9,6 @@ v1.2 - fixed CRS import methods
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
 
-***The [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
-is no longer maintained; please switch to QGIS3 !***
-
 ### Features
 
 * no dependencies, natively reads binary (v8 format) survex .3d files;
@@ -379,6 +376,9 @@ The corresponding GeoPackage file is in the `example` directory as
 
 Further notes on cave surveying and GIS are in 
 [`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf) in `docs`.
+
+There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import) of this plugin but it
+is no longer maintained.
 
 ### Copying
 
