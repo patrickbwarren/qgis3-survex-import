@@ -1,10 +1,9 @@
 # QGIS3 plugin to import survex .3d files
 
-**Current version 1.2.1**
+**Current version 1.2**
 
 ### Changelog
 
-v1.2.1 - updated EPSG:7405 to EPSG:27700  
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
@@ -178,20 +177,20 @@ For example `DowProv.svx` contains
 
 ```
 *cs OSGB:SD
-*cs out EPSG:27700
+*cs out EPSG:7405
 ```
 This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
-100km x 100km SD grid square, and that the output  should use the all-numeric 
-British National Grid 
-([EPSG:27700](https://spatialreference.org/ref/epsg/27700/)).
-Note that [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) is also the British National Grid but
-this EPSG code seems to be deprecated.
+100km x 100km SD grid square, and that the output should use the
+[EPSG:7405](https://spatialreference.org/ref/epsg/7405/) CRS which is the 
+all-numeric 
+British National Grid + ODN (Ordnance Datum Newlyn) for altitude.
+Note that [EPSG:27700](https://spatialreference.org/ref/epsg/7405/), which is also the British National Grid, doesn't formally include altitudes.
 
 Using `dump3d` to inspect
 `DowProv.3d` one finds the line
 
 ```
-CS +init=epsg:27700 +no_defs
+CS +init=epsg:7405 +no_defs
 ```
 This is a [proj4](https://en.wikipedia.org/wiki/PROJ) string
 embedded in the .3d file.  The input filter uses this to identify the CRS: 
@@ -230,9 +229,9 @@ have been shifted to a new false origin for the SD grid square.
 Another example is the Austrian Loser plateau data that accompanies the
 survex distribution as sample data.  Many of the cave entrances are 
 recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
-SRS (the non-truncated form is
+CRS (the non-truncated form is
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).
-This truncated SRS corresponds to a proj4 string
+This truncated CRS corresponds to a proj4 string
 
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 
@@ -255,7 +254,7 @@ Great Britain_ which can be found on the Ordnance Survey website.
 _TL;DR: for optimal use, specify the CRS using `*cs out` with an EPSG number._
 
 Also, choose a *metric* co-ordinate system, such as the British National Grid
-([EPSG:27700](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
+([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
 or a WGS 84 UTM zone
 ([EPSG:32601](https://spatialreference.org/ref/epsg/32601/) ... 
 [EPSG:32660](https://spatialreference.org/ref/epsg/32660/);
@@ -375,10 +374,9 @@ The corresponding GeoPackage file is in the `example` directory as
 [`DowProv.gpkg`](example/DowProv.gpkg).
 
 Further notes on cave surveying and GIS are in 
-[`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf) in `docs`.
+[`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf).
 
-There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import) of this plugin but it
-is no longer maintained.
+There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import) of this plugin but it is no longer being maintained.
 
 ### Copying
 
@@ -404,4 +402,4 @@ The .3d file parser is based on a GPL v2 library to handle Survex 3D files (`*.3
 copyright &copy; 2008-2012 Thomas Holder, http://sf.net/users/speleo3/; 
 see https://github.com/speleo3/inkscape-speleo.
 
-Modifications and extensions copyright &copy; (2018-2020) Patrick B Warren.
+Modifications and extensions copyright &copy; (2018-2021) Patrick B Warren.
