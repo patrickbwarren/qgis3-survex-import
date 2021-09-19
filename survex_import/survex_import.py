@@ -278,6 +278,34 @@ class SurvexImport:
             QgsMessageLog.logMessage(msg, tag='Import .3d', level=Qgis.Info)
             self.crs = None
 
+    def all_checked(self):
+        """ ensures the import all check box is consistent"""
+        check = self.dlg.Legs.isChecked()
+        check = check and self.dlg.Stations.isChecked()
+        check = check and self.dlg.Polygons.isChecked() 
+        check = check and self.dlg.Walls.isChecked()
+        check = check and self.dlg.XSections.isChecked()
+        check = check and self.dlg.Traverses.isChecked()
+        check = check and self.dlg.LegsSurface.isChecked()
+        check = check and self.dlg.LegsSplay.isChecked()
+        check = check and self.dlg.LegsDuplicate.isChecked()
+        check = check and self.dlg.StationsSurface.isChecked()
+        self.dlg.ImportAll.setChecked(check)
+
+    def toggle_import_all(self):
+        """toggle import all possible data"""
+        checked = self.dlg.ImportAll.isChecked()
+        self.dlg.Legs.setChecked(checked)
+        self.dlg.Stations.setChecked(checked)
+        self.dlg.Polygons.setChecked(checked) 
+        self.dlg.Walls.setChecked(checked)
+        self.dlg.XSections.setChecked(checked)
+        self.dlg.Traverses.setChecked(checked)
+        self.dlg.LegsSurface.setChecked(checked)
+        self.dlg.LegsSplay.setChecked(checked)
+        self.dlg.LegsDuplicate.setChecked(checked)
+        self.dlg.StationsSurface.setChecked(checked)
+
     def add_layer(self, subtitle, geom):
         """Add a memory layer with title(subtitle) and geom"""
         name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
@@ -333,6 +361,17 @@ class SurvexImport:
             self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
             self.dlg.CRSFromFile.setChecked(False)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
+            self.dlg.ImportAll.clicked.connect(self.toggle_import_all)
+            self.dlg.Legs.clicked.connect(self.all_checked)
+            self.dlg.Stations.clicked.connect(self.all_checked)
+            self.dlg.Polygons.clicked.connect(self.all_checked)
+            self.dlg.Walls.clicked.connect(self.all_checked)
+            self.dlg.XSections.clicked.connect(self.all_checked)
+            self.dlg.Traverses.clicked.connect(self.all_checked)
+            self.dlg.LegsSurface.clicked.connect(self.all_checked)
+            self.dlg.LegsSplay.clicked.connect(self.all_checked)
+            self.dlg.LegsDuplicate.clicked.connect(self.all_checked)
+            self.dlg.StationsSurface.clicked.connect(self.all_checked)
 
         self.dlg.show() # show the dialog
 
