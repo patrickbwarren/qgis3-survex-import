@@ -4,7 +4,7 @@
 
 ### Changelog
 
-v1.2.1 - add option to select/deselect all import checkboxes in UI  
+v1.2.1 - add option to select / deselect all import checkboxes in dialog  
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
