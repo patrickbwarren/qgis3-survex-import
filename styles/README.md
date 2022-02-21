@@ -5,3 +5,5 @@ survey data (points, lines, polygons) by (mean) elevation, either
 using specified ranges or interpolating between the `zmin` and `zmax`
 variables.  See discussion in the [`README`](../README.md)
 in the top level directory.
+
+Copyright &copy; (2018-2022) Patrick B Warren.

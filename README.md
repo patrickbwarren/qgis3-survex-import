@@ -4,7 +4,7 @@
 
 ### Changelog
 
-v1.2.1 - add option to select / deselect all import checkboxes in dialog  
+v1.3 - for plugin upload to QGIS3 plugin repository
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
@@ -399,8 +399,9 @@ along with this program.  If not, see
 
 ### Copyright
 
+Copyright &copy; (2018-2022) Patrick B Warren.
+
 The .3d file parser is based on a GPL v2 library to handle Survex 3D files (`*.3d`),
 copyright &copy; 2008-2012 Thomas Holder, http://sf.net/users/speleo3/; 
 see https://github.com/speleo3/inkscape-speleo.
 
-Modifications and extensions copyright &copy; (2018-2021) Patrick B Warren.

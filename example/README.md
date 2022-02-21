@@ -15,3 +15,5 @@ survex 1.2.38.
 
 For more details see
 [`cave_surveying_and_GIS.pdf`](../cave_surveying_and_GIS.pdf).
+
+Copyright &copy; (2018-2022) Patrick B Warren.

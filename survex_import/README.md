@@ -7,3 +7,5 @@ the location of which can be found from within QGIS3 by going to
 
 Alternatively if you have `pb_tool` you can run `pb_tool deploy` in
 this directory.
+
+Copyright &copy; (2018-2022) Patrick B Warren.

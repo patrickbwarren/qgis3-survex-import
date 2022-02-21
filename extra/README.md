@@ -10,3 +10,5 @@
 
 * `old3d2json.py` converts old-style ASCII .3d files at v0.01 to
   GeoJSON, writing to stdout, and optionally adding a CRS.
+
+Copyright &copy; (2018-2022) Patrick B Warren.
