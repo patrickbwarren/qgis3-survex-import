@@ -28,7 +28,7 @@ changelog=GitHub repository release versions
     1.0 - migrated and updated from QGIS 2.18 plugin
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=python,survex
 
 homepage=https://github.com/patrickbwarren/qgis3-survex-import
 category=Vector
