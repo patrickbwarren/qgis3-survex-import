@@ -1,10 +1,10 @@
 # QGIS3 plugin to import survex .3d files
 
-**Current version 1.2.1**
+**Current version 1.3**
 
 ### Changelog
 
-v1.3 - for plugin upload to QGIS3 plugin repository
+v1.3 - upload to QGIS3 plugin repository
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
