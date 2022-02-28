@@ -42,7 +42,7 @@ route is not available:
 (\*) Alternatively if you have `pb_tool` you can run `pb_tool
 deploy` from _within_ the `survex_import` directory.
 
-Lastly, debian users may be able to install from a packaged version  
+Debian users may be able to install from a packaged version  
 https://packages.debian.org/sid/qgis3-survex-import
 
 ### Usage
