@@ -1,14 +1,5 @@
 # QGIS3 plugin to import survex .3d files
 
-**Current version 1.3**
-
-### Changelog
-
-v1.3 - upload to QGIS3 plugin repository  
-v1.2 - fixed CRS import methods  
-v1.1 - minor updates, tagged for packaging  
-v1.0 - migrated and updated from QGIS 2.18 plugin
-
 ### Features
 
 * no dependencies (pure python); natively reads binary (v8 format) survex .3d files;
@@ -23,8 +14,8 @@ v1.0 - migrated and updated from QGIS 2.18 plugin
 ### Installation
 
 The plugin is available through the [QGIS Python Plugins
-Repository](https://plugins.qgis.org/plugins/).  By far the easiest is to
-install from this repository: launch QGIS3 and go to 'Plugins &rarr; Manage and
+Repository](https://plugins.qgis.org/plugins/).  By far the easiest way to
+install from this repository is to launch QGIS3 and go to 'Plugins &rarr; Manage and
 Install Plugins...'.  Then, under the 'All' tab, search for 'survex' to
 find the 'Import .3d file' plugin; select this and click 'Install Plugin'.
 
@@ -191,7 +182,8 @@ This specifies that the entrance `*fix`s are in the Ordnance Survey (OS)
 [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) CRS which is the 
 all-numeric 
 British National Grid + ODN (Ordnance Datum Newlyn) for altitude.
-Note that [EPSG:27700](https://spatialreference.org/ref/epsg/7405/), which is also the British National Grid, doesn't formally include altitudes.
+Note that [EPSG:27700](https://spatialreference.org/ref/epsg/7405/),
+which is also the British National Grid, doesn't formally include altitudes.
 
 Using `dump3d` to inspect
 `DowProv.3d` one finds the line
@@ -382,7 +374,15 @@ The corresponding GeoPackage file is in the `example` directory as
 Further notes on cave surveying and GIS are in 
 [`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf).
 
-There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import) of this plugin but it is no longer being maintained.
+There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
+of this plugin but it is no longer being maintained.
+
+### Changelog
+
+v1.3 (current) - upload to QGIS3 plugin repository  
+v1.2 - fixed CRS import methods  
+v1.1 - minor updates, tagged for packaging  
+v1.0 - migrated and updated from QGIS 2.18 plugin
 
 ### Copying
 
