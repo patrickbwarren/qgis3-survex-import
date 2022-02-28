@@ -1,21 +1,21 @@
-# QGIS3 plugin to import survex .3d files
+# QGIS3 plugin to import survex .3d files 
 
 ### Features
 
 * no dependencies (pure python); natively reads binary (v8 format) survex .3d files;
 * import stations and legs with full metadata;
 * create passage walls, cross-sections, and polygons from LRUD data;
-* all features have _z_ dimensions, and (mean) elevations to assist downstream workflows;
+* all features have _z_ dimensions, and (mean) elevations to assist with downstream workflows;
 * the co-ordinate reference system (CRS) can be imported from the .3d file (*);
 * results can be saved immediately as a GeoPackage file.
 
 (*) with the appropriate `*cs` commands in the .svx source files (see below).
 
-### Installation
+### Installation (v1.3)
 
 The plugin is available through the [QGIS Python Plugins
-Repository](https://plugins.qgis.org/plugins/).  By far the easiest way to
-install from this repository is to launch QGIS3 and go to 'Plugins &rarr; Manage and
+Repository](https://plugins.qgis.org/plugins/).  By far the easiest installation route is to 
+install from this repository: launch QGIS3 and go to 'Plugins &rarr; Manage and
 Install Plugins...'.  Then, under the 'All' tab, search for 'survex' to
 find the 'Import .3d file' plugin; select this and click 'Install Plugin'.
 
