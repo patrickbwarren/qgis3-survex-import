@@ -16,7 +16,7 @@
 The plugin is available through the [QGIS Python Plugins
 Repository](https://plugins.qgis.org/plugins/).
 
-By far the easiest installation route is therefore to launch QGIS3,
+By far the easiest installation route  therefore is to launch QGIS3,
 go to 'Plugins &rarr; Manage and Install Plugins...', then (under the
 'All' tab) enter 'survex' in the search filter to find the 'Import .3d
 file' plugin, select it and click 'Install Plugin'.
@@ -42,7 +42,7 @@ route is not available:
 (\*) Alternatively if you have `pb_tool` you can run `pb_tool
 deploy` from _within_ the `survex_import` directory.
 
-Debian users may be able to install from a packaged version  
+Debian users may be able to install from a packaged version:  
 https://packages.debian.org/sid/qgis3-survex-import
 
 ### Usage
