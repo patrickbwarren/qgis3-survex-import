@@ -21,6 +21,12 @@ go to 'Plugins &rarr; Manage and Install Plugins...', then (under the
 'All' tab) enter 'survex' in the search filter to find the 'Import .3d
 file' plugin, select it and click 'Install Plugin'.
 
+When installed, a menu item 'Import .3d file' should appear on the
+'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
+.3d icon in a toolbar.
+
+#### Manual installation
+
 Manual installation is possible if the QGIS Python Plugins Repository
 route is not available:
 
@@ -35,10 +41,6 @@ route is not available:
 
 (\*) Alternatively if you have `pb_tool` you can run `pb_tool
 deploy` from _within_ the `survex_import` directory.
-
-When installed, a menu item 'Import .3d file' should appear on the
-'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
-.3d icon in a toolbar.
 
 Lastly, debian users may be able to install from a packaged version  
 https://packages.debian.org/sid/qgis3-survex-import
