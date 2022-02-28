@@ -11,12 +11,12 @@
 
 (*) with the appropriate `*cs` commands in the .svx source files (see below).
 
-### Installation (v1.3)
+### Installation
 
-The plugin is available through the [QGIS Python Plugins
+The current version (v1.3) is now available through the [QGIS Python Plugins
 Repository](https://plugins.qgis.org/plugins/).
 
-By far the easiest installation route  therefore is to launch QGIS3,
+By far the easiest installation route therefore is to launch QGIS3,
 go to 'Plugins &rarr; Manage and Install Plugins...', then (under the
 'All' tab) enter 'survex' in the search filter to find the 'Import .3d
 file' plugin, select it and click 'Install Plugin'.
