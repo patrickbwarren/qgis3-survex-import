@@ -14,13 +14,10 @@
 ### Installation
 
 The current version (v1.3) is now available through the [QGIS Python Plugins
-Repository](https://plugins.qgis.org/plugins/).
-
-By far the easiest installation route therefore is to launch QGIS3,
+Repository](https://plugins.qgis.org/plugins/): launch QGIS3,
 go to 'Plugins &rarr; Manage and Install Plugins...', then (under the
 'All' tab) enter 'survex' in the search filter to find the 'Import .3d
 file' plugin, select it and click 'Install Plugin'.
-
 When installed, a menu item 'Import .3d file' should appear on the
 'Vector' drop-down menu in the main QGIS3 window, and (if enabled) a
 .3d icon in a toolbar.
