@@ -258,9 +258,9 @@ class SurvexImport:
         elif self.dlg.CRSFromFile.isChecked() and s:
             self.crs_source = 'from .3d file'
             self.crs = QgsCoordinateReferenceSystem()
-            match = search('epsg:([0-9]*)', s) # check for epsg in proj string
+            match = search('epsg:([0-9]*)', s.lower()) # check for epsg in proj string
             if match: # if found, use the EPSG number explicitly
-                self.crs.createFromString('EPSG:{}'.format(int(match.group(1))))
+                self.crs.createFromString(f'EPSG:{int(match.group(1))}')
             else: # fall back to proj4
                 self.crs.createFromProj4(s)
         else: # fall back to raising a CRS selection dialog
