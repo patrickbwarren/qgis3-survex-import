@@ -8,7 +8,7 @@
                               -------------------
         begin                : 2019-05-03
         git sha              : $Format:%H$
-        copyright            : (C) 2019-2020 by Patrick B Warren
+        copyright            : (C) 2019-2023 by Patrick B Warren
         email                : patrickbwarren@gmail.com
  ***************************************************************************/
 
@@ -39,7 +39,7 @@ from .resources import *
 from .survex_import_dialog import SurvexImportDialog
 
 from struct import unpack # used to read binary from .3d file
-from re import search # for matching and extracting substrings
+from re import search, IGNORECASE # for matching and extracting substrings
 from math import log10, floor, sqrt
 
 import os # used for file system operations
@@ -258,7 +258,7 @@ class SurvexImport:
         elif self.dlg.CRSFromFile.isChecked() and s:
             self.crs_source = 'from .3d file'
             self.crs = QgsCoordinateReferenceSystem()
-            match = search('epsg:([0-9]*)', s.lower()) # check for epsg in proj string
+            match = search('epsg:([0-9]*)', s, flags=IGNORECASE) # check for EPSG in CS string
             if match: # if found, use the EPSG number explicitly
                 self.crs.createFromString(f'EPSG:{int(match.group(1))}')
             else: # fall back to proj4
@@ -266,7 +266,7 @@ class SurvexImport:
         else: # fall back to raising a CRS selection dialog
             self.crs_source = 'from dialog'
             dialog = QgsProjectionSelectionDialog()
-            dialog.setMessage('define the CRS for the imported layers')
+            dialog.setMessage('Define the CRS for the imported layers')
             dialog.exec() # run the dialog ..
             self.crs = dialog.crs() # .. and recover the user input
         if self.crs.isValid():
