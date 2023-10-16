@@ -372,21 +372,18 @@ restarted.
 
 ### Example
 
-Sample georeferenced survey data can be found in the `example` directory as
+Sample precompiled georeferenced survey data can be found in the `DowProv` directory as
 [`DowProv.3d`](example/DowProv.3d).
 
 The corresponding GeoPackage file is in the `example` directory as
 [`DowProv.gpkg`](example/DowProv.gpkg).
-
-Further notes on cave surveying and GIS are in 
-[`cave_surveying_and_GIS.pdf`](cave_surveying_and_GIS.pdf).
 
 There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
 of this plugin but it is no longer being maintained.
 
 ### Changelog
 
-v1.3.1 (current) - fix to handle both ways survex embeds EPSG numbers in the `.3d` file.
+v1.3.1 (current) - fix to handle how survex embeds EPSG numbers in the `.3d` file.
 v1.3 - upload to QGIS3 plugin repository  
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
