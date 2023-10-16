@@ -170,21 +170,22 @@ maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This
 means that the _spatial reference system_ (SRS) should be specified; 
 in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).
 
-One way to do this is certainly to import the `.3d` file and either
-setting the layer(s) CRS on import through a dialog, or afterwards, to
-the desired system.  Import options are available for both these.
+One way to do this is to import the `.3d` file and either
+set the layer(s) CRS on import through a dialog, or afterwards, to
+the desired CRS.  Import options are available for both these.
 
-A third option though is the attempt to infer the layer(s) CRS from
+A third option is to attempt to infer the layer(s) CRS from
 the `.3d` file.  This can be done if survex is informed of the
 co-ordinate system by using `*cs` and `*cs out` commands in the .svx
 file.  For many cases, these commands are included in the survex data
-files to be able to handle station fixes properly, and calculate
+set to be able to handle station fixes properly, and calculate
 magnetic declinations automatically.
 
 For example `DowProv.svx` contains
 
 ```
 *cs OSGB:SD
+...
 *cs out EPSG:7405
 ```
 This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
@@ -242,7 +243,8 @@ This is derived from the proj4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 by changing the `+y_0` entry.
 
-For more details and examples of survex `*cs` commands see the survex documentation. 
+For more details and examples of survex `*cs` commands see the 
+[survex data file](https://survex.com/docs/manual/datafile.htm) documentation. 
 
 In-depth explanations of co-ordinate reference systems in general can be found in the 
 Ordnance Survey booklet entitled _A Guide to Coordinate Systems in 
