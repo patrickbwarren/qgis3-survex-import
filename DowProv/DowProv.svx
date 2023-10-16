@@ -39,13 +39,14 @@
 ; equivalent to full numeric NGR references. 
 
 *cs OSGB:SD
-*cs out EPSG:7405
-
-; *cs out EPSG:3042 ; WGS84 UTM zone 30N (includes zone 30U)
 
 ; Mag dec calculated for SD 97480 72608 alt 225m
 ; Dowbergill Bridge, just above Kettlewell
 *declination auto 97480 72608 225
+
+*cs out EPSG:7405
+
+; *cs out EPSG:3042 ; WGS84 UTM zone 30N (includes zone 30U)
 
 *title DowProv
 
