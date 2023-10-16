@@ -1,0 +1,63 @@
+; Dow Cave - Providence Pot system, including Dowbergill Passage
+
+; Created 27/10/2015 by Patrick Warren (PBW) from an original by Steve Warren
+
+; Surveyed 1982 (Dow Cave) -- 2015 (Dowbergill upstream of 800 yds chamber)
+
+; Historically Providence Pot was classed as from the entrance to Stalagmite
+; Corner, and the rest was classed as Dowbergill Passage (or Dowber Gill
+; Passage), part of Dow Cave -- N. Brindle, CPC Journal 2(1), 4-9 (1955).
+; The usage here 'Dowbergill Passage' follows Northern Caves vol 1 (1972-9).
+; In terms of the survey data, Dowbergill Passage splits naturally at 800 yds
+; chamber, where the WRPC re-survey ended in 2004.
+ 
+; Magnetic declinations in individual files were originally calculated
+; using the International Geomagnetic Reference Field (IGRF) model,
+; with the online NOAA magnetic declination calculator, for the
+; location (WGS84) 54.14929 N, 2.04008 W corresponding to SD 97480
+; 72608 (Dowbergill Bridge, just above Kettlewell).  All these
+; declinations are now commented out, as this method is deprecated in
+; favour of using the *declination auto command below.  However it has
+; been verified that both methods generate the exact same reduced
+; survey data.
+
+; People involved (in alphabetical order):
+; Steve Barwick, Howard Beck, Simon Beck, David Bradley, Andy Cole,
+; Peter Lamb, Becka Lawson, Shawn McMinn, Dave Morris, Russel Myers,
+; Dennis Round, Gareth Sewell (Sweeney), Carmen Smith, Patrick Warren,
+; Steve Warren, Edward Whitaker, Peter Whitaker.
+
+; Clubs involved (in alphabetical order):
+; Craven Pothole Club (CPC)
+; Red Rose Cave and Pothole Club (RRCPC)
+; White Rose Pothole Club (WRPC)
+
+; Input CRS *fixes are NGR references, relative to the SW corner of
+; the Ordnance Survey SD grid square, ie SD 000 000.
+
+; Output CRS is the British National Grid + ODN (EPSG:7405)
+; equivalent to full numeric NGR references. 
+
+*cs OSGB:SD
+*cs out EPSG:7405
+
+; *cs out EPSG:3042 ; WGS84 UTM zone 30N (includes zone 30U)
+
+; Mag dec calculated for SD 97480 72608 alt 225m
+; Dowbergill Bridge, just above Kettlewell
+*declination auto 97480 72608 225
+
+*title DowProv
+
+*include DowCave/DowCave
+*include DowbergillPassage/Dowbergill1
+*include DowbergillPassage/Dowbergill2
+*include ProvidencePot/ProvidencePot
+
+*equate DowCave.dow2.31 Dowbergill1.dgp1.1
+*equate Dowbergill1.dgp5.16 Dowbergill2.dgp6.46
+*equate Dowbergill2.dgp7.1 ProvidencePot.PPot6.15
+
+*flags surface
+*include HagDyke ; surface feature -- building
+*flags not surface

@@ -1,0 +1,60 @@
+; Title: Dow Cave
+
+; created 10/2015 -- 3/2016 by Patrick Warren (PBW) from original
+; compilations by Steve Warren
+
+; Dow Cave entrance at SD 98378 74300, alitude 334m ODN.  Corresponds
+; to 1:10k OS map on Magic Map.  Altitude from levelling from a
+; benchmark at Park Rash (Bob Cross + Steve Warren, 1986).
+
+*begin DowCave
+*export entrance
+*export dow2.31
+*export dow2.35
+
+*entrance entrance
+*fix entrance 98378 74300 334
+*equate entrance dow1.1
+
+*include dow1
+*include dow2
+*include glooploop
+*include dribblemine
+*include hobsons
+*include depot
+*include dow3
+*include dripstone
+*include rattle1
+*include rattle2
+*include rattle3
+*include rattle4
+*include stemple1
+*include stemple2
+*include clogsway
+*include bridge
+*include tube
+*include roofgardens
+*include choke2/choke2
+
+*equate dow1.27 dow2.27
+*equate dow2.27 glooploop.1
+*equate dow2.35 glooploop.18
+*equate dow2.31 dribblemine.31
+*equate dow2.35 hobsons.35
+*equate hobsons.7 depot.20
+*equate depot.16 dow3.1
+*equate dow3.1 dripstone.71
+*equate dow3.8 rattle1.1a
+*equate rattle1.8 rattle2.34
+*equate rattle1.15 rattle3.15
+*equate rattle3.b rattle4.47
+*equate dripstone.78a rattle4.41a
+*equate dow3.8 stemple1.1
+*equate dow3.8 stemple2.2
+*equate dow3.11 clogsway.11
+*equate dow3.11 bridge.1
+*equate dow3.15 tube.1
+*equate dow3.24 roofgardens.7
+*equate dow3.24 choke2.digA.1
+
+*end DowCave

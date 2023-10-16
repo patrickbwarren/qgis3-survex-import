@@ -1,0 +1,28 @@
+; Summation of all or nearly all survey lines around Second Choke
+; includes Crawl, Dig A, Albert Hall, Wet Way, Cellar, Dig B, Roof
+; Chambers.
+; 2CM is 2nd Choke Mkr
+
+*begin choke2
+*export digA.1
+
+*include digA
+*include roofchambers
+*include digB
+*include wetway
+*include cellar
+*include wetblackrift
+*include albert1
+*include albert2
+*include albert3
+
+*equate digA.1 roofchambers.1 ; 2CM
+*equate digA.1 digB.7 ; 2CM
+*equate digA.1 wetway.1 ; 2CM
+*equate wetway.9 cellar.4 ; CellM
+*equate wetway.9 wetblackrift.9 ; CellM
+*equate digA.22 albert1.7
+*equate albert1.1 albert2.1 ; AHM
+*equate albert1.1 albert3.5 ; AHM
+
+*end choke2
