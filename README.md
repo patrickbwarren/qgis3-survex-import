@@ -165,20 +165,20 @@ reality may be pure coincidence: if in doubt, use splays!
 
 #### Co-ordinate reference system (CRS)
 
-To be integrated with other sources of geographical information such as 
-maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This 
-means that the _spatial reference system_ (SRS) should be specified:
-in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).
+To be integrated with other sources of geographical information such
+as maps, GPS tracks, and so on, an imported survey should be
+_georeferenced_.  This means that the _spatial reference system_ (SRS)
+should be specified: in QGIS parlance this is referred to as a
+_co-ordinate reference system_ (CRS).  In the dialog box for the
+present .3d importer plugin, check boxes offer a couple of options for
+setting the imported layer(s) CRS: either attempt to infer the CRS
+from the `.3d` file, or inherit the CRS from the QGIS project file.
+If neither box is checked, a CRS selector dialog window is launched.
 
-One way to do this is to set the imported layer(s) CRS on import through a dialog.
-Alternatively, the layer CRS can be set afterwards.  
-Import options are available for both these.
-
-A third option is to attempt to infer the layer(s) CRS from
-the `.3d` file.  This can be done if survex is informed of the
-co-ordinate system by using `*cs` and `*cs out` commands in the .svx
-file.  For many cases, these commands are included in the survex data
-set to be able to handle station fixes properly, and calculate
+Inferring the CRS from the .3d file should work if survex has been informed
+of the co-ordinate system by using `*cs` and `*cs out` commands in the
+.svx file.  For many cases, these commands are included in the survex
+data set to be able to handle station fixes properly, and calculate
 magnetic declinations automatically.
 
 For example `DowProv.svx` contains
@@ -188,31 +188,41 @@ For example `DowProv.svx` contains
 ...
 *cs out EPSG:7405
 ```
-This specifies that the entrance `*fix`s are in the Ordnance Survey (OS) 
+This specifies that the entrance `*fix` s are in the Ordnance Survey (OS) 
 100km x 100km SD grid square, and that the output should use the
 [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) CRS which is the 
 all-numeric 
 British National Grid + ODN (Ordnance Datum Newlyn) for altitude.
 
-The output CRS gets written into the `.3d` file, so for example by
+The output CS gets written as metadata into the `.3d` file.  For example by
 using `dump3d` to inspect `DowProv.3d` one finds the line
 ```
 CS EPSG:7405
 ```
-The QGIS plugin uses this string to identify the CRS: if it specifies
-an
+
+The QGIS plugin uses this metadata in the .3d file to identify the
+CRS:
+
+* if it specifies an
 [EPSG](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset)
-number then that determines the CRS; otherwise it is assumed to be a
-'proj4' string and an attempt is made to create a CRS accordingly.  If
-the .3d file does not contain a CS string then the input filter
+number then that determines the CRS;
+* otherwise it is assumed to be a 'proj4' string and an attempt is
+made to create a CRS accordingly.
+
+If the .3d file does not contain CS metadata then the input filter
 fall backs onto a CRS selector dialog.
+
+For the DowProv example with the above `*cs` and `*cs out` commands,
+if the resulting .3d file is imported into QGIS with the 'CRS from .3d
+file' option checked, the CRS for the imported layer(s) should be
+EPSG:7405.
 
 In some cases it may be helpful to create beforehand a user-defined
 CRS to select in the import dialog.  For example, if the `*cs`
 commands are omitted from `DowProv.svx`, the resulting .3d file lacks
-CRS information and all co-ordinates are relative to the OS SD grid
+CS metadata and all co-ordinates are relative to the OS SD grid
 square.  This .3d file can nevertheless still be imported into QGIS3
-by first creating a custom CRS for the SD grid square, then specifying
+by first creating a custom CRS (in QGIS) for the SD grid square, then specifying
 this custom CRS in the import dialog (or inheriting from the project
 CRS if that is set appropriately).
 
@@ -246,19 +256,13 @@ by changing the `+y_0` entry.
 For more details and examples of survex `*cs` commands see the 
 [survex data file](https://survex.com/docs/manual/datafile.htm) documentation. 
 
-In-depth explanations of co-ordinate reference systems in general can be found in the 
-Ordnance Survey booklet entitled _A Guide to Coordinate Systems in 
-Great Britain_ which can be found on the Ordnance Survey website.
+In-depth explanations of co-ordinate reference systems in general can
+be found in the Ordnance Survey booklet entitled _A Guide to
+Coordinate Systems in Great Britain_ which can be found on the
+Ordnance Survey website.
 
-_TL;DR: for optimal use, specify the CRS using `*cs out` with an EPSG number._
-
-Also, choose a *metric* co-ordinate system, such as the British National Grid
-([EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/))
-or a WGS 84 UTM zone
-([EPSG:32601](https://spatialreference.org/ref/epsg/32601/) ... 
-[EPSG:32660](https://spatialreference.org/ref/epsg/32660/);
-[EPSG:32701](https://spatialreference.org/ref/epsg/32701/) ... 
-[EPSG:32760](https://spatialreference.org/ref/epsg/32760/)).
+_TL;DR: if you can, specify the CRS using `*cs out` in the top level
+.svx file with an EPSG number._
 
 Note that currently some options permissible by survex, such as
 specifying the CRS by an ESRI number, are not handled here.  For the
