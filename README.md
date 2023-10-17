@@ -413,7 +413,7 @@ along with this program.  If not, see
 
 ### Copyright
 
-Copyright &copy; (2018-2022) Patrick B Warren.
+Copyright &copy; (2018-2023) Patrick B Warren.
 
 The .3d file parser is based on a GPL v2 library to handle Survex 3D files (`*.3d`),
 copyright &copy; 2008-2012 Thomas Holder, http://sf.net/users/speleo3/; 
