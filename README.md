@@ -167,12 +167,12 @@ reality may be pure coincidence: if in doubt, use splays!
 
 To be integrated with other sources of geographical information such as 
 maps, GPS tracks, and so on, an imported survey should be _georeferenced_.  This 
-means that the _spatial reference system_ (SRS) should be specified; 
+means that the _spatial reference system_ (SRS) should be specified:
 in QGIS parlance this is referred to as a _co-ordinate reference system_ (CRS).
 
-One way to do this is to import the `.3d` file and either
-set the layer(s) CRS on import through a dialog, or afterwards, to
-the desired CRS.  Import options are available for both these.
+One way to do this is to set the imported layer(s) CRS on import through a dialog.
+Alternatively, the layer CRS can be set afterwards.  
+Import options are available for both these.
 
 A third option is to attempt to infer the layer(s) CRS from
 the `.3d` file.  This can be done if survex is informed of the
@@ -204,7 +204,7 @@ an
 [EPSG](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset)
 number then that determines the CRS; otherwise it is assumed to be a
 'proj4' string and an attempt is made to create a CRS accordingly.  If
-the .3d file does not contain a CS information then the input filter
+the .3d file does not contain a CS string then the input filter
 fall backs onto a CRS selector dialog.
 
 In some cases it may be helpful to create beforehand a user-defined
