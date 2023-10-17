@@ -387,7 +387,7 @@ of this plugin but it is no longer being maintained.
 
 ### Changelog
 
-v1.3.1 (current) - fix to handle how survex embeds EPSG numbers in the `.3d` file.
+v1.3.1 (current) - fix to handle how survex embeds EPSG numbers in the `.3d` file.  
 v1.3 - upload to QGIS3 plugin repository  
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
