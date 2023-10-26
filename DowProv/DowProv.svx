@@ -35,8 +35,8 @@
 ; Input CRS *fixes are NGR references, relative to the SW corner of
 ; the Ordnance Survey SD grid square, ie SD 000 000.
 
-; Output CRS is the British National Grid + ODN (EPSG:7405)
-; equivalent to full numeric NGR references. 
+; If the output CRS is EPSG:7405 this is the British National Grid +
+; ODN heights, and is equivalent to full numeric NGR references.
 
 *cs OSGB:SD
 
