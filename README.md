@@ -192,7 +192,7 @@ This specifies that the entrance `*fix` s are in the Ordnance Survey (OS)
 100km x 100km SD grid square, and that the output should use the
 [EPSG:7405](https://spatialreference.org/ref/epsg/7405/) CRS which is the 
 all-numeric 
-British National Grid + ODN (Ordnance Datum Newlyn) for altitude.
+British National Grid + ODN (Ordnance Datum Newlyn) for height.
 
 The output CS gets written as metadata into the `.3d` file.  For example by
 using `dump3d` to inspect `DowProv.3d` one finds the line
@@ -269,6 +269,20 @@ specifying the CRS by an ESRI number, are not handled here.  For the
 time being, the workaround is to identify what co-ordinate system
 these are in QGIS language, then use the CRS selector dialog on loading
 to set the layer(s) CRS appropriately.
+
+For users of `*declination auto`, note that this should come _after_
+the `*cs` and `*cs out` commands in order that survex knows which
+input CRS is being used to define the location, and which output CRS
+should be used to calculate the grid convergence (difference between
+grid north and true north).  For some output CRS such as EPSG:3042
+(ETRS89 UTM zone 30N) the data interchange order is the 'wrong way
+around', ie (northing, easting) rather than the more usual (easting,
+northing).  This has the unfortunate effect of throwing the grid
+convergence calculation out by 90 degrees, thus completely screwing up
+the calculations.  Thus such CRS should be avoided for the time being.
+As long as one uses `*cs out UTM30N` or `*cs out EPSG:32630` for WGS84
+UTM zone 30N, or `*cs out EPSG:25830` for ETRS89 UTM zone 30N, one
+does not encounter this problem.
 
 ### What to do next
 
