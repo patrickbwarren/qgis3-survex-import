@@ -2,11 +2,11 @@
 
 ; created 27/10/2015 by Patrick Warren (PBW)
 ; from NGR coords extracted from 1:10k OS map on Magic Map
-; Obviously these are measured wrt grid north
-
-*declination 0 degrees
+; Obviously these are measured wrt grid north (OSGB)
 
 *begin HagDyke
+
+*declination 0 degrees ; the scope here is limited to the begin/end statement
 
 ; W corner at SD 99213 72887, alitude 459m ODN (from OS Terrain 50 dataset).
 ; OS Terrain 50 dataset Crown copyright and database right (2014).
