@@ -9,7 +9,8 @@
 * the co-ordinate reference system (CRS) can be imported from the `.3d` file (*);
 * results can be saved immediately as a GeoPackage file.
 
-(*) with the appropriate `*cs` commands in the .svx source files (see below).
+(*) with the appropriate `*cs` and `*cs out` commands in the `.svx`
+source files (see below).
 
 ### Installation
 
