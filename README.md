@@ -460,7 +460,7 @@ equal to ELEVATION minus MEAN_DOWN, and HEIGHT equal to MEAN_DOWN plus
 MEAN_UP.  Then render the polygons with the _z_ co-ordinate as the
 absolute FLOOR, and extruded height as HEIGHT.
 
-Note that there is currently a bug in the Qgis2threejs plugin for
+Note that there has been a bug in the Qgis2threejs plugin for
 QGIS3 that causes a python error when features have data defined
 properties, such as color by elevation using _zmin_ and _zmax_
 variables (second option above).  The error looks like
