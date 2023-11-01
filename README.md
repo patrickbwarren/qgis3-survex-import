@@ -352,8 +352,8 @@ usual (easting, northing).  An example is
 [EPSG:25830](https://spatialreference.org/ref/epsg/25830/) and indeed
 you cannot tell the difference either from the proj.4 string or the
 so-called '[Well Known
-Text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems)'
-either: one has to somehow
+Text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems)':
+somehow one has to
 [know](https://gis.stackexchange.com/questions/224238/whats-the-difference-between-epsg-3043-and-epsg-25831)
 these things, which seem to even be [implementation
 dependent](https://gis.stackexchange.com/questions/434038/order-of-latitude-and-longitude-in-epsg4326)!
