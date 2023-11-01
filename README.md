@@ -355,7 +355,7 @@ so-called '[Well Known
 Text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems)':
 somehow one has to
 [know](https://gis.stackexchange.com/questions/224238/whats-the-difference-between-epsg-3043-and-epsg-25831)
-these things, which seem to even be [implementation
+these things, which seem even to be [implementation
 dependent](https://gis.stackexchange.com/questions/434038/order-of-latitude-and-longitude-in-epsg4326)!
 Currently if you use `*cs out` with one of these co-ordinate systems
 in combination with `*declination auto`, it has the unfortunate effect
