@@ -344,9 +344,9 @@ the whole survey_ to zero: if you do need to mix `*declination auto`
 and `*declination <specified>` commands, limit the scope of the latter
 by bracketing them in `*begin` and `*end` statements;
 
-* for certain `*cs out` choices the 'interchange data' order is
-(northing, easting) rather than the more usual (easting, northing).
-An example is
+* for certain `*cs out` choices the 'interchange data' order is the
+'wrong way around', _i.e._ (northing, easting) rather than the more
+usual (easting, northing).  An example is
 [EPSG:3042](https://spatialreference.org/ref/epsg/etrs89-etrs-tm30/)
 (see above), which is ostensibly the same as
 [EPSG:25830](https://spatialreference.org/ref/epsg/25830/) and indeed
