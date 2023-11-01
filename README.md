@@ -494,13 +494,13 @@ function correctly any more.  It may have to reloaded (which can be
 done if you have installed the 'Plugin Reloader' plugin); or QGIS3
 restarted.
 
-### Example
+### Example data set
 
-Sample precompiled georeferenced survey data can be found in the `DowProv` directory as
-[`DowProv.3d`](example/DowProv.3d).
-
-There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
-of this plugin but it is no longer being maintained.
+A real-life example data set which implements the above protocols for
+the Dow Cave - Providence Pot system (including Dowbergill Passage) is
+contained in the `DowProv` directory.  A precompiled `.3d` file
+georeferenced to the OSGB36 CRS can be found there as
+[`DowProv.3d`](DowProv/DowProv.3d).
 
 ### Changelog
 
@@ -509,6 +509,9 @@ v1.3 - upload to QGIS3 plugin repository
 v1.2 - fixed CRS import methods  
 v1.1 - minor updates, tagged for packaging  
 v1.0 - migrated and updated from QGIS 2.18 plugin
+
+There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
+of this plugin but it is no longer being maintained.
 
 ### Copying
 
