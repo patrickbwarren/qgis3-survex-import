@@ -334,9 +334,9 @@ dates at which the compass bearings were taken.  There are a few
 commands in order that survex knows which input CRS is being used to
 define the location used for the magnetic declination calculation, and
 which output CRS should be used to calculate the grid convergence
-(difference between grid north and true north): if it comes before
-survex doesn't currently complain (it probably should) but sets the
-grid convergence to zero;
+(difference between grid north and true north): if `*declination auto`
+comes _before_ `*cs out`, survex doesn't currently complain (it probably
+should) but sets the grid convergence to zero;
 
 * likewise avoid having a `*declination <specified>` in the top level
 as this will have the side effect of setting the grid convergence _for
