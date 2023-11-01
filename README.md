@@ -386,9 +386,9 @@ Putting this all together, you need something like the following:
 ```
 Usually, this would be spread across separate `*include` files and
 indeed one would normally split out each individual survey trip into
-its own `.svx` file, with its own `*begin` and `*end`, however
-discussion of 'best practice' for organising survey data is probably
-best left to another place.
+its own `.svx` file, with its own `*begin` and `*end`.  Discussion of
+such 'best practice' for organising survey data is probably best left
+to another place though!
 
 ### What to do next
 
