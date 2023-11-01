@@ -279,6 +279,11 @@ these are in QGIS language, then use the CRS selector dialog on
 loading to set the layer(s) CRS appropriately, if necessary creating a
 custom CRS beforehand, as described next.
 
+In-depth explanations of co-ordinate reference systems in general can
+be found in the Ordnance Survey booklet entitled _A Guide to
+Coordinate Systems in Great Britain_ which can be found on the
+Ordnance Survey website.
+
 #### Custom CRS
 
 In some cases it may be helpful to create beforehand a user-defined
@@ -314,11 +319,6 @@ This truncated CRS corresponds to a proj.4 string
 ```
 (again this should be all on one line).  This is derived from the
 proj.4 string for EPSG:31255 by changing the `+y_0` entry.
-
-In-depth explanations of co-ordinate reference systems in general can
-be found in the Ordnance Survey booklet entitled _A Guide to
-Coordinate Systems in Great Britain_ which can be found on the
-Ordnance Survey website.
 
 #### Magnetic declinations
 
@@ -365,7 +365,6 @@ avoided for the time being, and for instance here do NOT use `*cs out
 EPSG:3042`, rather use `*cs out EPSG:25830` which is the _exact_ same
 co-ordinate system but with the interchange data order being the
 expected way around.
-
 
 Putting this all together, you need something like the following
 
