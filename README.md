@@ -326,9 +326,9 @@ This is potentially a large subject, and one can again refer to the
 survex documentation for more details.  The modern approach, which
 fits with the recommended use pattern for the `.3d` file importer, is
 to use a `*declination auto` command with a position representative of
-the data set, and appropriate `*date` commands to reflect the dates at
-which the compass bearings were taken.  There are a few 'gotchas'
-though:
+the cave survey data, and appropriate `*date` commands to reflect the
+dates at which the compass bearings were taken.  There are a few
+'gotchas' though:
 
 * `*declination auto` should come _after_ the `*cs` and `*cs out`
 commands in order that survex knows which input CRS is being used to
@@ -387,8 +387,8 @@ Putting this all together, you need something like the following:
 Usually, this would be spread across separate `*include` files and
 indeed one would normally split out each individual survey trip into
 its own `.svx` file, with its own `*begin` and `*end`.  Discussion of
-such 'best practice' for organising survey data is probably best left
-to another place though!
+such 'best practice' for organising cave survey data is probably best
+left to another place though!
 
 ### What to do next
 
