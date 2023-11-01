@@ -381,7 +381,7 @@ Putting this all together, you need something like the following:
 *date <different date> ; declination automatically applied with different date
 ...
 *begin <subsurvey>
-*declination <specified> ; if you need to explicitly specify such
+*declination <specified> ; if you need to explicitly specify such...
 *end <subsurvey>
 ```
 Usually, this would be spread across separate `*include` files and
