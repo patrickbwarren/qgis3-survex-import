@@ -369,7 +369,7 @@ For instance, for ETRS89 UTM 30N do NOT use `*cs out EPSG:3042`,
 rather use `*cs out EPSG:25830` which is the _exact_ same co-ordinate
 system but with the interchange data order the right way around.
 
-Putting this all together, you need something like the following
+Putting this all together, you need something like the following:
 
 ```
 *cs out <output CRS>
@@ -384,11 +384,11 @@ Putting this all together, you need something like the following
 *declination <specified> ; if you need to explicitly specify such
 *end <subsurvey>
 ```
-These can of course be spread saperate `*include` files and indeed one
-would normally split out each individual survey trip into its own
-`.svx` file, with its own `*begin` and `*end`, however discussion of
-'best practice' for organising survey data is probably best left to
-another place.
+Usually, this would be spread across separate `*include` files and
+indeed one would normally split out each individual survey trip into
+its own `.svx` file, with its own `*begin` and `*end`, however
+discussion of 'best practice' for organising survey data is probably
+best left to another place.
 
 ### What to do next
 
