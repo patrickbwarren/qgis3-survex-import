@@ -172,15 +172,22 @@ the top level `.svx` file with an
 [EPSG](https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset)
 number.  Some recommended options here are:
 
-* `*cs out EPSG:7405` or `*cs out 27700` for
+* `*cs out EPSG:7405` =
   [OSGB36](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) (British
   National Grid);
-* `*cs out EPSG:25830` for [ETRS89 UTM zone
+* `*cs out 27700` = basically the same, [OSGB36](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) (see below);
+* `*cs out EPSG:25830` = [ETRS89 UTM zone
   30N](https://spatialreference.org/ref/epsg/etrs89-utm-zone-30n/)
   (Europe, −6°W to 0°W, and ETRS89 by country);
-* `*cs out EPSG:32630` or `*cs out UTM30N` for [WGS84 UTM zone
+* `*cs out EPSG:32630` = [WGS84 UTM zone
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/)
-  (World, N hemisphere, −6°W to 0°W, by country).
+  (World, N hemisphere, −6°W to 0°W, by country);
+* `*cs out UTM30N` = the same [WGS84 UTM zone
+  30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/),
+  but as a convenient mnemonic.
+
+All these can of course be equally used as `*cs` commands for
+specifying fixed points such as entrances.
 
 For the first,
 [EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/)
