@@ -255,8 +255,9 @@ More details on the `*cs` and `*cs out` commands can be found in the
 
 #### How it works
 
-The output CS gets written as metadata into the `.3d` file.  For example by
-using `dump3d` to inspect `DowProv.3d` one finds the line
+The CRS defined by `*cs out` gets written as metadata into the `.3d`
+file.  For example by using `dump3d` to inspect `DowProv.3d` one finds
+the line
 ```
 CS EPSG:7405
 ```
