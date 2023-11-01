@@ -232,7 +232,9 @@ longitude for a given geodetic datum.
 
 For the time being AVOID:
 
-*  `*cs out EPSG:3042` (ostensibly also ETRS89 UTM zone 30N) as this messes up grid convergence (see below).
+*  `*cs out EPSG:3042` (ostensibly also ETRS89 UTM zone 30N)
+
+since this messes up the grid convergence (see below).
 
 For the UK, survex provides a convenient shorthand for [Ordnance
 Survey (OS) grid
