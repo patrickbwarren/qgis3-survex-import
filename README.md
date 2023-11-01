@@ -499,9 +499,6 @@ restarted.
 Sample precompiled georeferenced survey data can be found in the `DowProv` directory as
 [`DowProv.3d`](example/DowProv.3d).
 
-The corresponding GeoPackage file is in the `example` directory as
-[`DowProv.gpkg`](example/DowProv.gpkg).
-
 There is a [QGIS2 version](https://github.com/patrickbwarren/qgis-survex-import)
 of this plugin but it is no longer being maintained.
 
