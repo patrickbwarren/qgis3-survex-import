@@ -324,17 +324,19 @@ proj.4 string for EPSG:31255 by changing the `+y_0` entry.
 
 This is potentially a large subject, and one can again refer to the
 survex documentation for more details.  The modern approach, which
-fits with the `.3d` file importer, is to use a `*declination auto`
-command with a position representative of the data set, and
-appropriate `*date` commands to reflect the dates at which the compass
-bearings were taken.  There are a few 'gotchas' though:
+fits with the recommended use pattern for the `.3d` file importer, is
+to use a `*declination auto` command with a position representative of
+the data set, and appropriate `*date` commands to reflect the dates at
+which the compass bearings were taken.  There are a few 'gotchas'
+though:
 
 * `*declination auto` should come _after_ the `*cs` and `*cs out`
 commands in order that survex knows which input CRS is being used to
-define the location, and which output CRS should be used to calculate
-the grid convergence (difference between grid north and true north):
-if it comes before survex doesn't currently complain (it probably
-should) but sets the grid convergence to zero;
+define the location used for the magnetic declination calculation, and
+which output CRS should be used to calculate the grid convergence
+(difference between grid north and true north): if it comes before
+survex doesn't currently complain (it probably should) but sets the
+grid convergence to zero;
 
 * likewise avoid having a `*declination <specified>` in the top level
 as this will have the side effect of setting the grid convergence _for
