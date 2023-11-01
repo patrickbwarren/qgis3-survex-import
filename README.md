@@ -320,7 +320,7 @@ This truncated CRS corresponds to a proj.4 string
 (again this should be all on one line).  This is derived from the
 proj.4 string for EPSG:31255 by changing the `+y_0` entry.
 
-#### Magnetic declinations
+#### Magnetic declination
 
 This is potentially a large subject, and one can again refer to the
 survex documentation for more details.  The modern approach, which
@@ -384,8 +384,8 @@ Putting this all together, you need something like the following:
 *declination <specified> ; if you need to explicitly specify such...
 *end <subsurvey>
 ```
-Usually, this would be spread across separate `*include` files and
-indeed one would normally split out each individual survey trip into
+Usually, this would be spread across separate `*include` files, and
+indeed one should normally split out each individual survey trip into
 its own `.svx` file, with its own `*begin` and `*end`.  Discussion of
 such 'best practice' for organising cave survey data is probably best
 left to another place though!
