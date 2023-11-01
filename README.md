@@ -341,9 +341,8 @@ grid convergence to zero;
 * likewise avoid having a `*declination <specified>` in the top level
 as this will have the side effect of setting the grid convergence _for
 the whole survey_ to zero: if you do need to mix `*declination auto`
-and `*declination <specified>` commands, the correct way is the limit
-the scope of the latter by bracketing it in `*begin` and `*end`
-commands;
+and `*declination <specified>` commands, limit the scope of the latter
+by bracketing it in `*begin` and `*end` commands;
 
 * for certain `*cs out` choices the 'interchange data' order is
 (northing, easting) rather than the more usual (easting, northing).
@@ -362,11 +361,14 @@ Currently if you use `*cs out` with one of these co-ordinate systems
 in combination with `*declination auto`, it has the unfortunate effect
 of throwing the grid convergence calculation out by 90&deg;, thus
 completely screwing up the calculations (however, it is pretty obvious
-that something extremely weird has happened).  Such CRS should be
-avoided for the time being, and for instance here do NOT use `*cs out
-EPSG:3042`, rather use `*cs out EPSG:25830` which is the _exact_ same
-co-ordinate system but with the interchange data order being the
-expected way around.
+that something extremely weird has happened).  Such CRS choices with
+the interchange data order the 'wrong way around' should be avoided
+for the time being but to my knowledge there is always an equivalent
+CRS with the interchange data order the right way around which can be
+used instead.  For instance, for ETRS89 UTM 30N co-ordinates do NOT
+use `*cs out EPSG:3042`, rather use `*cs out EPSG:25830` which is the
+_exact_ same co-ordinate system but with the interchange data order
+the right way around.
 
 Putting this all together, you need something like the following
 
