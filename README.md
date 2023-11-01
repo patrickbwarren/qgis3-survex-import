@@ -342,7 +342,7 @@ should) but sets the grid convergence to zero;
 as this will have the side effect of setting the grid convergence _for
 the whole survey_ to zero: if you do need to mix `*declination auto`
 and `*declination <specified>` commands, limit the scope of the latter
-by bracketing it in `*begin` and `*end` commands;
+by bracketing them in `*begin` and `*end` statements;
 
 * for certain `*cs out` choices the 'interchange data' order is
 (northing, easting) rather than the more usual (easting, northing).
