@@ -272,6 +272,13 @@ is made to create a CRS accordingly.
 If the `.3d` file does not contain CS metadata then the input filter
 fall backs onto a CRS selector dialog.
 
+Note that currently some options permissible by survex, such as
+specifying the CRS by an ESRI number, are not handled here.  For the
+time being, the workaround is to identify what co-ordinate system
+these are in QGIS language, then use the CRS selector dialog on
+loading to set the layer(s) CRS appropriately, if necessary creating a
+custom CRS beforehand, as described next.
+
 #### Custom CRS
 
 In some cases it may be helpful to create beforehand a user-defined
@@ -312,12 +319,6 @@ In-depth explanations of co-ordinate reference systems in general can
 be found in the Ordnance Survey booklet entitled _A Guide to
 Coordinate Systems in Great Britain_ which can be found on the
 Ordnance Survey website.
-
-Note that currently some options permissible by survex, such as
-specifying the CRS by an ESRI number, are not handled here.  For the
-time being, the workaround is to identify what co-ordinate system
-these are in QGIS language, then use the CRS selector dialog on loading
-to set the layer(s) CRS appropriately.
 
 #### Magnetic declinations
 
