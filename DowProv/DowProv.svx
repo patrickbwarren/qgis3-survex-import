@@ -38,13 +38,13 @@
 ; If the output CRS is EPSG:7405 this is the British National Grid +
 ; ODN heights, and is equivalent to full numeric NGR references.
 
-*cs OSGB:SD
-
+*cs OSGB:SD ; co-ordinates are 10-figure grid refs prefaced by SD
+*cs out EPSG:7405 ; output is 12-figure OSGB36 + ODN height
+;*cs out EPSG:27700 ; OSGB36 without ODN height
 ;*cs out UTM30N ; WGS84 UTM zone 30N
 ;*cs out EPSG:32630 ; WGS84 UTM zone 30N
-*cs out EPSG:25830 ; ETRS89 UTM zone 30N (E, N)
+;*cs out EPSG:25830 ; ETRS89 UTM zone 30N (E, N)
 ; DO NOT USE *cs out EPSG:3042 ; ETRS89 UTM zone 30N (N, E)
-;*cs out EPSG:7405 ; OSGB36 + ODN height
 
 ; Mag dec calculated for SD 97480 72608 alt 225m
 ; Dowbergill Bridge, just above Kettlewell
