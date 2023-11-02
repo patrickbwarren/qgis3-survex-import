@@ -550,8 +550,8 @@ restarted.
 A real-life example data set which implements the above protocols for
 the Dow Cave - Providence Pot system (including Dowbergill Passage) is
 contained in the `DowProv` directory.  A precompiled `.3d` file
-georeferenced to the OSGB36 CRS can be found there as
-[`DowProv.3d`](DowProv/DowProv.3d).
+georeferenced to [EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) 
+can be found there as [`DowProv.3d`](DowProv/DowProv.3d).
 
 ### Changelog
 
