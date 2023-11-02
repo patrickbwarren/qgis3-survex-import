@@ -324,7 +324,7 @@ CRS (the non-truncated form is
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).
 This truncated CRS corresponds to another (equally long!) proj.4 string
 (see also the entry under `*cs` in the survex data file
-[documenation](https://survex.com/docs/manual/datafile.htm))
+[documentation](https://survex.com/docs/manual/datafile.htm))
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 +x_0=0 +y_0=-5200000 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
