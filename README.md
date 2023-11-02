@@ -329,7 +329,7 @@ This truncated CRS corresponds to another (equally long!) proj.4 string
 ```
 This is derived from the proj.4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
-by changing the `+y_0` entry.  The `13d20` in here means 13&deg; 20' (see 
+by changing the `+y_0` entry.  The `13d20` in here means 13&deg;20' (see 
 proj.4 [documentation](https://proj.org/en/9.3/usage/projections.html)), 
 and you will sometimes see this written as a decimal `13.3333333333333`, 
 for instance in the proj.4 specification for 
