@@ -309,11 +309,11 @@ this custom CRS in the import dialog (or inheriting from the project
 CRS if that is set appropriately).
 
 For the OS SD grid square, the requisite custom CRS can be created
-from the following proj.4 string
+from the following (long!) proj.4 string
 ```
 +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=100000 +y_0=-500000 +ellps=airy +towgs84=375,-111,431,0,0,0,0 +units=m +vunits=m +no_defs
 ```
-(all on one line).  This is identical to the proj.4 string for the
+This is identical to the proj.4 string for the
 British National Grid except that the `+x_0` and `+y_0` entries have
 been shifted to a new false origin for the SD grid square.
 
@@ -322,12 +322,11 @@ survex distribution as sample data.  Many of the cave entrances are
 recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
 CRS (the non-truncated form is
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).
-This truncated CRS corresponds to a proj.4 string
+This truncated CRS corresponds to another (equally long!) proj.4 string
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 +x_0=0 +y_0=-5200000 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
-(again this should be all on one line).  This is derived from the
-proj.4 string for
+This is derived from the proj.4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 by changing the `+y_0` entry.
 
