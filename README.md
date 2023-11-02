@@ -439,7 +439,7 @@ easy to change the output CRS by 'wrapping' the top level survex file as
 ```
 These considerations summarise some recent exchanges on the survex
 mailing list.  Further discussion of 'best practice' for organising
-cave survey data is probably best left for now though!
+cave survey data is probably best left to another place though!
 
 ### What to do next
 
