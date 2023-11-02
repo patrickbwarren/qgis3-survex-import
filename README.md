@@ -200,14 +200,14 @@ maps](https://osdatahub.os.uk/docs/wmts/technicalSpecification) though
 use [EPSG:27700](https://spatialreference.org/ref/epsg/27700/).
 
 The second and third options are UTM co-ordinate systems that both
-cover most of western Europe, with the second
-[EPSG:25830](https://spatialreference.org/ref/epsg/25830/) using the
+cover most of western Europe.  The second
+[EPSG:25830](https://spatialreference.org/ref/epsg/25830/) uses the
 [ETRS89
 datum](https://en.wikipedia.org/wiki/European_Terrestrial_Reference_System_1989)
-which what is officially recommended, even by the [UK
-government](https://www.gov.uk/government/publications/open-standards-for-government/exchange-of-location-point),
-and the third
-[EPSG:32630](https://spatialreference.org/ref/epsg/32630/) using the
+which is what is officially recommended, even by the [UK
+government](https://www.gov.uk/government/publications/open-standards-for-government/exchange-of-location-point).
+The third
+[EPSG:32630](https://spatialreference.org/ref/epsg/32630/) uses the
 [WGS84 datum](https://en.wikipedia.org/wiki/World_Geodetic_System)
 which is what corresponds to
 [GPS](https://en.wikipedia.org/wiki/Global_Positioning_System)
