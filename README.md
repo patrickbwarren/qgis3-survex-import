@@ -234,7 +234,7 @@ For the time being AVOID:
 
 *  `*cs out EPSG:3042` (ostensibly also ETRS89 UTM zone 30N)
 
-since this messes up the grid convergence (see below).
+(and other CRS in the same sequence) since this messes up the grid convergence (see below).
 
 #### Ordnance Survey (UK) co-ordinates
 
