@@ -187,7 +187,7 @@ number.  Some recommended options here are:
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/),
   but as a convenient mnemonic.
 
-All these can of course be equally used as `*cs` commands for
+All these can of course equally well be used as `*cs` commands for
 specifying fixed points such as entrances.
 
 For the first,
@@ -223,8 +223,8 @@ co-ordinates and ETRS89 UTM co-ordinates.  But if you wanted to be
 finicky and use GPS entrance co-ordinates but have the output in a
 more respectful European-centric CRS, you might have something like
 ```
-*cs EPSG:32630 ; or *cs UTM30N ; GPS entrance co-ordinates are WGS84 UTM zone 30N,
 *cs out EPSG:25830 ; when in Europe, output in ETRS89 UTM zone 30N
+*cs EPSG:32630 ; or *cs UTM30N ; GPS entrance co-ordinates are WGS84 UTM zone 30N,
 ```
 UTM stands for [Universal Transverse
 Mercator](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system)
@@ -242,8 +242,8 @@ Survey (OS) grid
 letter](https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid)
 system.  For example `DowProv.svx` contains the following:
 ```
-*cs OSGB:SD ; co-ordinates are 10-figure grid refs prefaced by SD
-*cs out EPSG:7405 ; output is 12-figure OSGB36 + ODN height
+*cs out EPSG:7405 ; output is 12-figure OSGB36 (+ ODN height)
+*cs OSGB:SD ; input co-ordinates are 10-figure grid refs for the SD square
 ```
 This specifies that the fixed points (_e.g._ entrances) and the
 location for the automatically calculated magnetic declination (see
@@ -253,6 +253,11 @@ square, and that the output should be delivered using the all-numeric
 
 More details on the `*cs` and `*cs out` commands can be found in the
 [survex manual](https://survex.com/docs/manual/datafile.htm).
+
+In-depth explanations of co-ordinate reference systems in general can
+be found in the Ordnance Survey booklet entitled _A Guide to
+Coordinate Systems in Great Britain_ which can be found on the
+Ordnance Survey website.
 
 #### How it works
 
@@ -279,11 +284,6 @@ time being, the workaround is to identify what co-ordinate system
 these are in QGIS language, then use the CRS selector dialog on
 loading to set the layer(s) CRS appropriately, if necessary creating a
 custom CRS beforehand, as described next.
-
-In-depth explanations of co-ordinate reference systems in general can
-be found in the Ordnance Survey booklet entitled _A Guide to
-Coordinate Systems in Great Britain_ which can be found on the
-Ordnance Survey website.
 
 #### Custom CRS
 
@@ -319,9 +319,47 @@ This truncated CRS corresponds to a proj.4 string
 +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
 (again this should be all on one line).  This is derived from the
-proj.4 string for EPSG:31255 by changing the `+y_0` entry.
+proj.4 string for
+[EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
+by changing the `+y_0` entry.
 
-#### Magnetic declination
+#### French (IGN) Lambert system
+
+Cave entrance locations in the [French (IGN)
+system](https://www.ign.fr/)) can be a bit mysterious.  Mainland
+France and Corsica is covered by Lambert zone III which is
+[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/),
+however the way co-ordinates are commonly written in this CRS requires
+some deciphering.
+
+For example the Lambert zone III co-ordinates for the [Grotte
+Roche](http://www.speleo-vercors.org/page26.html) in the Bourne Gorge
+(Vercors) are given as X: 848,86 Y: 3312,72 Z: 740.  These are in km,
+with a comma as the decimal point. To convert these to something
+useful first change them to metres and then _drop_ the initial '3'
+from the Y co-ordinate (which presumably indicates III).  This gets
+848860, 312720, 740.  These are now properly
+[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/)
+co-ordinates which can readily be converted to a GPS location, and so
+on.  The whole thing can be done by 'abusing' survex's conversion
+capabilities with a three-line `.svx` file
+```
+*cs out UTM31N ; for GPS here we want WGS84 UTM zone 31N
+*cs EPSG:27563 ; the French Lambert zone III CRS
+*fix entrance 848860 312720 740 ; from the given X: 848,86 Y: 3312,72 Z: 740
+```
+Running this through survex and examining the `.3d` file with
+`dump3d`, one finds the line
+```
+NODE 696589.86 4993921.60 740.00 [entrance] FIXED
+```
+These are indeed the co-ordinates in WGS84 UTM zone 31N, or close
+enough: [Speleo Vercors](http://www.speleo-vercors.org/page26.html)
+gives GPS: 31N 696593E 4993925N, but note that the Lambert III
+co-ordinates are only given to an implied accuracy of 10m (two decimal
+places in km)
+
+### Magnetic declination
 
 This is potentially a large subject, and one can again refer to the
 survex documentation for more details.  The modern approach, which
@@ -374,8 +412,8 @@ Putting this all together, you need something like the following:
 
 ```
 *cs out <output CRS>
-*cs <input CRS>
-*declination auto <place> ; specify the location to use, in the input CRS
+*cs <declination auto CRS>
+*declination auto <somewhere handy> ; specify the location to use for this
 ...
 *date <date> ; declination at this date is automatically applied
 ...
@@ -387,9 +425,19 @@ Putting this all together, you need something like the following:
 ```
 Usually, this would be spread across separate `*include` files, and
 indeed one should normally split out each individual survey trip into
-its own `.svx` file, with its own `*begin` and `*end`.  Discussion of
-such 'best practice' for organising cave survey data is probably best
-left to another place though!
+its own `.svx` file, with its own `*begin` and `*end`.  Further `*cs`
+commands can be sprinkled through these files if there is a mixture of
+input co-ordinate systems.  As is pointed out in the survex
+documentation, it is the _first_ `*cs out` that sets the output CRS,
+all subsequent ones are silently ignored.  This means it is relatively
+easy to change the output CRS by 'wrapping' the top level survex file as
+```
+*cs out <new output CRS>
+*include <original top level .svx file>
+```
+These considerations summarise some recent exchanges on the survex
+mailing list.  Further discussion of 'best practice' for organising
+cave survey data is probably best left for now though!
 
 ### What to do next
 

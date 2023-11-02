@@ -39,6 +39,7 @@
 ; ODN heights, and is equivalent to full numeric NGR references.
 
 *cs OSGB:SD ; co-ordinates are 10-figure grid refs prefaced by SD
+
 *cs out EPSG:7405 ; output is 12-figure OSGB36 + ODN height
 ;*cs out EPSG:27700 ; OSGB36 without ODN height
 ;*cs out UTM30N ; WGS84 UTM zone 30N
