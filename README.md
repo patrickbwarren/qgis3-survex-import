@@ -315,7 +315,7 @@ from the following (long!) proj.4 string
 ```
 This is identical to the proj.4 string for [EPSG:27700](https://spatialreference.org/ref/epsg/27700/)
 (British National Grid) except that the `+x_0` and `+y_0` entries have
-been shifted to a new false origin for the SD grid square.
+been shifted to create a new false origin for the SD grid square.
 
 Another example is the Austrian Loser plateau data that accompanies the
 survex distribution as sample data.  Many of the cave entrances are 
