@@ -179,10 +179,10 @@ number.  Some recommended options here are:
 * `*cs out EPSG:27700` = basically the same, [OSGB36](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) (see below);
 * `*cs out EPSG:25830` = [ETRS89 UTM zone
   30N](https://spatialreference.org/ref/epsg/etrs89-utm-zone-30n/)
-  (Europe, −6°W to 0°W, and ETRS89 by country);
+  (Europe, −6&deg;W to 0&deg;W, and ETRS89 by country);
 * `*cs out EPSG:32630` = [WGS84 UTM zone
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/)
-  (World, N hemisphere, −6°W to 0°W, by country);
+  (World, N hemisphere, −6&deg;W to 0&deg;W, by country);
 * `*cs out UTM30N` = exactly the same [WGS84 UTM zone
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/),
   but as a convenient mnemonic.
@@ -329,7 +329,11 @@ This truncated CRS corresponds to another (equally long!) proj.4 string
 ```
 This is derived from the proj.4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
-by changing the `+y_0` entry.
+by changing the `+y_0` entry.  The `13d20` in here means 13&deg; 20' (see 
+proj.4 [documentation](https://proj.org/en/9.3/usage/projections.html)), 
+and you will sometimes see this written as a decimal `13.3333333333333`, 
+for instance in the proj.4 specification for 
+[EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 
 #### How it works
 
