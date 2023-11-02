@@ -237,6 +237,8 @@ For the time being AVOID:
 
 since this messes up the grid convergence (see below).
 
+#### Ordnance Survey (UK) co-ordinates
+
 For the UK, survex provides a convenient shorthand for [Ordnance
 Survey (OS) grid
 letter](https://en.wikipedia.org/wiki/Ordnance_Survey_National_Grid)
@@ -259,31 +261,41 @@ be found in the Ordnance Survey booklet entitled _A Guide to
 Coordinate Systems in Great Britain_ which can be found on the
 Ordnance Survey website.
 
-#### How it works
+#### French (IGN) Lambert system
 
-The CRS defined by `*cs out` gets written as metadata into the `.3d`
-file.  For example by using `dump3d` to inspect `DowProv.3d` one finds
-the line
+Cave entrance locations in the [French (IGN)
+system](https://www.ign.fr/)) can be a bit mysterious.  Mainland
+France and Corsica is covered by Lambert zone III which is
+[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/),
+however the way co-ordinates are commonly written in this CRS requires
+some deciphering.
+
+For example the Lambert zone III co-ordinates for the [Grotte
+Roche](http://www.speleo-vercors.org/page26.html) in the Bourne Gorge
+(Vercors) are given as X: 848,86 Y: 3312,72 Z: 740.  These are in km,
+with a comma as the decimal point. To convert these to something
+useful first change them to metres and then _drop_ the initial '3'
+from the Y co-ordinate (which presumably indicates III).  This gets
+848860, 312720, 740.  These are now properly
+[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/)
+co-ordinates which can readily be converted to a GPS location, and so
+on.  The whole thing can be done by 'abusing' survex's conversion
+capabilities with a three-line `.svx` file
 ```
-CS EPSG:7405
+*cs out UTM31N ; for GPS here we want WGS84 UTM zone 31N
+*cs EPSG:27563 ; the French Lambert zone III CRS
+*fix entrance 848860 312720 740 ; from the given X: 848,86 Y: 3312,72 Z: 740
 ```
-The QGIS plugin uses this metadata in the `.3d` file to identify the
-CRS:
-
-* if it specifies an EPSG number then that determines the CRS;
-* otherwise it is assumed to be a
-'[proj.4](https://en.wikipedia.org/wiki/PROJ)' string and an attempt
-is made to create a CRS accordingly.
-
-If the `.3d` file does not contain CS metadata then the input filter
-fall backs onto a CRS selector dialog.
-
-Note that currently some options permissible by survex, such as
-specifying the CRS by an ESRI number, are not handled here.  For the
-time being, the workaround is to identify what co-ordinate system
-these are in QGIS language, then use the CRS selector dialog on
-loading to set the layer(s) CRS appropriately, if necessary creating a
-custom CRS beforehand, as described next.
+Running this through survex and examining the `.3d` file with
+`dump3d`, one finds the line
+```
+NODE 696589.86 4993921.60 740.00 [entrance] FIXED
+```
+These are indeed the co-ordinates in WGS84 UTM zone 31N, or close
+enough: [Speleo Vercors](http://www.speleo-vercors.org/page26.html)
+gives GPS: 31N 696593E 4993925N, but note that the Lambert III
+co-ordinates are only given to an implied accuracy of 10m (two decimal
+places in km)
 
 #### Custom CRS
 
@@ -323,41 +335,31 @@ proj.4 string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 by changing the `+y_0` entry.
 
-#### French (IGN) Lambert system
+#### How it works
 
-Cave entrance locations in the [French (IGN)
-system](https://www.ign.fr/)) can be a bit mysterious.  Mainland
-France and Corsica is covered by Lambert zone III which is
-[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/),
-however the way co-ordinates are commonly written in this CRS requires
-some deciphering.
+The CRS defined by `*cs out` gets written as metadata into the `.3d`
+file.  For example by using `dump3d` to inspect `DowProv.3d` one finds
+the line
+```
+CS EPSG:7405
+```
+The QGIS plugin uses this metadata in the `.3d` file to identify the
+CRS:
 
-For example the Lambert zone III co-ordinates for the [Grotte
-Roche](http://www.speleo-vercors.org/page26.html) in the Bourne Gorge
-(Vercors) are given as X: 848,86 Y: 3312,72 Z: 740.  These are in km,
-with a comma as the decimal point. To convert these to something
-useful first change them to metres and then _drop_ the initial '3'
-from the Y co-ordinate (which presumably indicates III).  This gets
-848860, 312720, 740.  These are now properly
-[EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/)
-co-ordinates which can readily be converted to a GPS location, and so
-on.  The whole thing can be done by 'abusing' survex's conversion
-capabilities with a three-line `.svx` file
-```
-*cs out UTM31N ; for GPS here we want WGS84 UTM zone 31N
-*cs EPSG:27563 ; the French Lambert zone III CRS
-*fix entrance 848860 312720 740 ; from the given X: 848,86 Y: 3312,72 Z: 740
-```
-Running this through survex and examining the `.3d` file with
-`dump3d`, one finds the line
-```
-NODE 696589.86 4993921.60 740.00 [entrance] FIXED
-```
-These are indeed the co-ordinates in WGS84 UTM zone 31N, or close
-enough: [Speleo Vercors](http://www.speleo-vercors.org/page26.html)
-gives GPS: 31N 696593E 4993925N, but note that the Lambert III
-co-ordinates are only given to an implied accuracy of 10m (two decimal
-places in km)
+* if it specifies an EPSG number then that determines the CRS;
+* otherwise it is assumed to be a
+'[proj.4](https://en.wikipedia.org/wiki/PROJ)' string and an attempt
+is made to create a CRS accordingly.
+
+If the `.3d` file does not contain CS metadata then the input filter
+fall backs onto a CRS selector dialog.
+
+Note that currently some options permissible by survex, such as
+specifying the CRS by an ESRI number, are not handled here.  For the
+time being, the workaround is to identify what co-ordinate system
+these are in QGIS language, then use the CRS selector dialog on
+loading to set the layer(s) CRS appropriately, if necessary creating a
+custom CRS beforehand, as described next.
 
 ### Magnetic declination
 
