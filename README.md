@@ -264,7 +264,7 @@ Ordnance Survey website.
 #### French (IGN) Lambert system
 
 Cave entrance locations in the [French (IGN)
-system](https://www.ign.fr/)) can be a bit mysterious.  Mainland
+system](https://www.ign.fr/) can be a bit mysterious.  Mainland
 France and Corsica is covered by Lambert zone III which is
 [EPSG:27563](https://spatialreference.org/ref/epsg/ntf-paris-lambert-sud-france/),
 however the way co-ordinates are commonly written in this CRS requires
