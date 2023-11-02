@@ -236,6 +236,14 @@ For the time being AVOID:
 
 (and other CRS in the same sequence) since this messes up the grid convergence (see below).
 
+More details on the `*cs` and `*cs out` commands can be found in the
+[survex manual](https://survex.com/docs/manual/datafile.htm).
+
+In-depth explanations of co-ordinate reference systems in general can
+be found in the Ordnance Survey booklet entitled _A Guide to
+Coordinate Systems in Great Britain_ which can be found on the
+Ordnance Survey website.
+
 #### Ordnance Survey (UK) co-ordinates
 
 For the UK, survex provides a convenient shorthand for [Ordnance
@@ -251,14 +259,6 @@ location for the automatically calculated magnetic declination (see
 below) are 10-figure grid references in the OS 100km x 100km SD grid
 square, and that the output should be delivered using the all-numeric
 12-figure British National Grid.
-
-More details on the `*cs` and `*cs out` commands can be found in the
-[survex manual](https://survex.com/docs/manual/datafile.htm).
-
-In-depth explanations of co-ordinate reference systems in general can
-be found in the Ordnance Survey booklet entitled _A Guide to
-Coordinate Systems in Great Britain_ which can be found on the
-Ordnance Survey website.
 
 #### French (IGN) Lambert system
 
