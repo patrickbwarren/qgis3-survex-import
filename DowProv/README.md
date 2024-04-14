@@ -12,4 +12,4 @@ so on Windows you might have to use something like
 [Notepad++](https://notepad-plus-plus.org/ "Notepad++")
 to look at them.
 
-Copyright &copy; (2018-2023) Patrick B Warren.
+Copyright &copy; (2018-2023) Patrick B Warren, and others.
