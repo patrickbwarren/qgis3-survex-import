@@ -12,7 +12,6 @@ so on Windows you might have to use something like
 [Notepad++](https://notepad-plus-plus.org/ "Notepad++")
 to look at them.
 
-<<<<<<< HEAD
 Historically Providence Pot was classed as from the entrance to Stalagmite
 Corner, and the rest was classed as Dowbergill Passage (or Dowber Gill
 Passage), part of Dow Cave -- N. Brindle, CPC Journal 2(1), 4-9 (1955).
@@ -57,7 +56,8 @@ you attribute to the caving clubs involved along the lines:
 For reference cite PB Warren, _The Dow Cave – Providence Pot Resurvey Project_
 CPC Record *122*, 11-15 (2016).
 
-Copyright &copy; (2018-2023) Patrick B Warren.
-=======
+A version of this article can also be found 
+[online](https://sites.google.com/site/patrickbwarren/caving/dow-cave) 
+on my website.
+
 Copyright &copy; (2018-2023) Patrick B Warren, and others.
->>>>>>> 471ff3543cb57fc02e766c7c18cf0842c240ddda
