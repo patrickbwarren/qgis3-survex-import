@@ -12,8 +12,8 @@ to look at them.
 
 Historically Providence Pot was classed as from the entrance to
 Stalagmite Corner, and the rest was classed as Dowbergill Passage (or
-Dowber Gill Passage), part of Dow Cave -- N. Brindle, CPC Journal
-2(1), 4-9 (1955).  The usage here 'Dowbergill Passage' follows
+Dowber Gill Passage), part of Dow Cave [N. Brindle, CPC Journal
+2(1), 4-9 (1955)].  The usage here 'Dowbergill Passage' follows
 Northern Caves vol 1 (1972-9).  In terms of the survey data,
 Dowbergill Passage splits naturally at 800 yds chamber, where the
 White Rose Pothole Club (WRPC) re-survey ended in 2004.
@@ -51,7 +51,7 @@ you attribute to the caving clubs involved along the lines:
 
 `Based on cave survey data collected 1982-2015, CPC, WRCPC, RRCPC`
 
-For reference cite PB Warren, _The Dow Cave – Providence Pot Resurvey Project_
+For reference cite P. B. Warren, _The Dow Cave – Providence Pot Resurvey Project_
 CPC Record **122**, 11-15 (2016).
 
 A version of this article can also be found 
