@@ -179,10 +179,10 @@ number.  Some recommended options here are:
 * `*cs out EPSG:27700` = basically the same, [OSGB36](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) (see below);
 * `*cs out EPSG:25830` = [ETRS89 UTM zone
   30N](https://spatialreference.org/ref/epsg/etrs89-utm-zone-30n/)
-  (Europe, −6°W to 0°W, and ETRS89 by country);
+  (Europe, −6&deg;W to 0&deg;W, and ETRS89 by country);
 * `*cs out EPSG:32630` = [WGS84 UTM zone
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/)
-  (World, N hemisphere, −6°W to 0°W, by country);
+  (World, N hemisphere, −6&deg;W to 0&deg;W, by country);
 * `*cs out UTM30N` = exactly the same [WGS84 UTM zone
   30N](https://spatialreference.org/ref/epsg/wgs-84-utm-zone-30n/),
   but as a convenient mnemonic.
@@ -200,14 +200,13 @@ maps](https://osdatahub.os.uk/docs/wmts/technicalSpecification) though
 use [EPSG:27700](https://spatialreference.org/ref/epsg/27700/).
 
 The second and third options are UTM co-ordinate systems that both
-cover most of western Europe, with the second
-[EPSG:25830](https://spatialreference.org/ref/epsg/25830/) using the
+cover most of western Europe: 
+[EPSG:25830](https://spatialreference.org/ref/epsg/25830/) uses the
 [ETRS89
 datum](https://en.wikipedia.org/wiki/European_Terrestrial_Reference_System_1989)
-which what is officially recommended, even by the [UK
-government](https://www.gov.uk/government/publications/open-standards-for-government/exchange-of-location-point),
-and the third
-[EPSG:32630](https://spatialreference.org/ref/epsg/32630/) using the
+which is what is officially recommended, even by the [UK
+government](https://www.gov.uk/government/publications/open-standards-for-government/exchange-of-location-point), and
+[EPSG:32630](https://spatialreference.org/ref/epsg/32630/) uses the
 [WGS84 datum](https://en.wikipedia.org/wiki/World_Geodetic_System)
 which is what corresponds to
 [GPS](https://en.wikipedia.org/wiki/Global_Positioning_System)
@@ -235,7 +234,15 @@ For the time being AVOID:
 
 *  `*cs out EPSG:3042` (ostensibly also ETRS89 UTM zone 30N)
 
-since this messes up the grid convergence (see below).
+(and other CRS in the same sequence) since this messes up the grid convergence (see below).
+
+More details on the `*cs` and `*cs out` commands can be found in the
+[survex manual](https://survex.com/docs/manual/datafile.htm).
+
+In-depth explanations of co-ordinate reference systems in general can
+be found in the Ordnance Survey booklet entitled _A Guide to
+Coordinate Systems in Great Britain_ which can be found on the
+Ordnance Survey website.
 
 #### Ordnance Survey (UK) co-ordinates
 
@@ -252,14 +259,6 @@ location for the automatically calculated magnetic declination (see
 below) are 10-figure grid references in the OS 100km x 100km SD grid
 square, and that the output should be delivered using the all-numeric
 12-figure British National Grid.
-
-More details on the `*cs` and `*cs out` commands can be found in the
-[survex manual](https://survex.com/docs/manual/datafile.htm).
-
-In-depth explanations of co-ordinate reference systems in general can
-be found in the Ordnance Survey booklet entitled _A Guide to
-Coordinate Systems in Great Britain_ which can be found on the
-Ordnance Survey website.
 
 #### French (IGN) Lambert system
 
@@ -309,11 +308,11 @@ this custom CRS in the import dialog (or inheriting from the project
 CRS if that is set appropriately).
 
 For the OS SD grid square, the requisite custom CRS can be created
-from the following (long!) proj.4 string
+from the following (long!) [proj.4](https://en.wikipedia.org/wiki/PROJ) string
 ```
 +proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=100000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs
 ```
-This is identical to the proj.4 string for [EPSG:27700](https://spatialreference.org/ref/epsg/27700/)
+This is identical to the [proj.4](https://en.wikipedia.org/wiki/PROJ) string for [EPSG:27700](https://spatialreference.org/ref/epsg/27700/)
 (British National Grid) except that the `+x_0` and `+y_0` entries have
 been shifted to create a new false origin for the SD grid square.
 
@@ -322,15 +321,19 @@ survex distribution as sample data.  Many of the cave entrances are
 recorded using a truncated form of the MGI / Gauss-Krüger (GK) Central Austria
 CRS (the non-truncated form is
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)).
-This truncated CRS corresponds to another (equally long!) proj.4 string
+This truncated CRS corresponds to another (equally long!) [proj.4](https://en.wikipedia.org/wiki/PROJ) string
 (see also the entry under `*cs` in the survex data file
 [documentation](https://survex.com/docs/manual/datafile.htm))
 ```
 +proj=tmerc +lat_0=0 +lon_0=13d20 +k=1 +x_0=0 +y_0=-5200000 +ellps=bessel +towgs84=577.326,90.129,463.919,5.137,1.474,5.297,2.4232 +units=m +no_defs
 ```
-This is derived from the proj.4 string for
+This is derived from the [proj.4](https://en.wikipedia.org/wiki/PROJ) string for
 [EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
-by changing the `+y_0` entry.
+by changing the `+y_0` entry.  The `13d20` in here means 13&deg;20' (see 
+[documentation](https://proj.org/en/9.3/usage/projections.html)), 
+and you will sometimes see this written as a decimal `13.3333333333333`, 
+for instance in the [proj.4](https://en.wikipedia.org/wiki/PROJ) specification for 
+[EPSG:31255](https://spatialreference.org/ref/epsg/mgi-austria-gk-central/)
 
 #### How it works
 
@@ -345,7 +348,7 @@ CRS:
 
 * if it specifies an EPSG number then that determines the CRS;
 * otherwise it is assumed to be a
-'[proj.4](https://en.wikipedia.org/wiki/PROJ)' string and an attempt
+[proj.4](https://en.wikipedia.org/wiki/PROJ) string and an attempt
 is made to create a CRS accordingly.
 
 If the `.3d` file does not contain CS metadata then the input filter
@@ -373,8 +376,8 @@ commands in order that survex knows which input CRS is being used to
 define the location used for the magnetic declination calculation, and
 which output CRS should be used to calculate the grid convergence
 (difference between grid north and true north): if `*declination auto`
-comes _before_ `*cs out`, survex doesn't currently complain (it probably
-should) but sets the grid convergence to zero;
+comes _before_ `*cs out`, survex doesn't currently complain but it
+sets the grid convergence to zero;
 
 * likewise avoid having a `*declination <specified>` in the top level
 as this will have the side effect of setting the grid convergence _for
@@ -388,7 +391,7 @@ usual (easting, northing).  An example is
 [EPSG:3042](https://spatialreference.org/ref/epsg/etrs89-etrs-tm30/)
 (see above), which is ostensibly the same as
 [EPSG:25830](https://spatialreference.org/ref/epsg/25830/) and indeed
-you cannot tell the difference either from the proj.4 string or the
+you cannot tell the difference either from the [proj.4](https://en.wikipedia.org/wiki/PROJ) string or the
 so-called '[Well Known
 Text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_coordinate_reference_systems)':
 somehow one has to
@@ -547,8 +550,8 @@ restarted.
 A real-life example data set which implements the above protocols for
 the Dow Cave - Providence Pot system (including Dowbergill Passage) is
 contained in the `DowProv` directory.  A precompiled `.3d` file
-georeferenced to the OSGB36 CRS can be found there as
-[`DowProv.3d`](DowProv/DowProv.3d).
+georeferenced to [EPSG:7405](https://spatialreference.org/ref/epsg/osgb36-british-national-grid-odn-height/) 
+can be found there as [`DowProv.3d`](DowProv/DowProv.3d).
 
 ### Changelog
 
