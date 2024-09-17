@@ -2,9 +2,7 @@
 
 This directory contains the cave survey data for the
 [Dow Cave - Providence Pot system](http://www.mudinmyhair.co.uk/ "Mud in My Hair")
-(Great Whernside, Wharfedale, UK), and is
-essentially a snapshot of the data held in the
-[Cave Registry Data Archive](http://cave-registry.org.uk/ "Cave Registry"), re-organised into folders.
+(Great Whernside, Wharfedale, UK).
 
 Note that the `.svx` files have
 [unix-style line endings](https://en.wikipedia.org/wiki/Newline "wikipedia")
