@@ -27,6 +27,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QFileDialog
 
 from qgis.core import Qgis
+from qgis.core import QgsExpressionContextUtils
 from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
 from qgis.core import QgsPoint, QgsLineString, QgsPolygon
 from qgis.core import QgsVectorFileWriter, QgsMessageLog
@@ -310,6 +311,8 @@ class SurvexImport:
         """Add a memory layer with title(subtitle) and geom"""
         name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
         layer =  QgsVectorLayer(geom, name, 'memory')
+        #set a layer variable to the 3d file location
+        QgsExpressionContextUtils.setLayerVariable(layer, 'layer_3dfile', self.path_3d)
         if self.crs: # this should have been set by now
             layer.setCrs(self.crs)
         if not layer.isValid():
