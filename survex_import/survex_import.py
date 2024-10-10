@@ -27,6 +27,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QFileDialog
 
 from qgis.core import Qgis
+from qgis.core import QgsAction
+from qgis.core import QgsExpressionContextUtils
 from qgis.core import QgsProject, QgsVectorLayer, QgsField, QgsFeature, QgsGeometry
 from qgis.core import QgsPoint, QgsLineString, QgsPolygon
 from qgis.core import QgsVectorFileWriter, QgsMessageLog
@@ -205,6 +207,17 @@ class SurvexImport:
         self.actions.append(action)
 
         return action
+        
+    def action_aven(self,  layer):
+        """Sets an action to open the application Aven to view the 3d file"""
+        
+        # Define the action name and command
+        action_name = "Open 3d file in Aven"
+        action_text = 'aven [% @layer_3dfile %]'  # Tested on Linux (Debian)
+        
+        action = QgsAction(QgsAction.Generic, action_name, action_text, '',  False,  	shortTitle = 'Aven')
+        action.setActionScopes({'Feature'})
+        layer.actions().addAction(action)
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
@@ -306,10 +319,14 @@ class SurvexImport:
         self.dlg.LegsDuplicate.setChecked(checked)
         self.dlg.StationsSurface.setChecked(checked)
 
-    def add_layer(self, subtitle, geom):
+    def add_layer(self, subtitle, geom,  file_3d):
         """Add a memory layer with title(subtitle) and geom"""
         name = '%s(%s)' % (self.title, subtitle) if self.title else subtitle
         layer =  QgsVectorLayer(geom, name, 'memory')
+        #Set a layer variable to the 3d file location
+        QgsExpressionContextUtils.setLayerVariable(layer, 'layer_3dfile', file_3d)
+        #Set an action to open the 3d file in Aven
+        self.action_aven(layer)
         if self.crs: # this should have been set by now
             layer.setCrs(self.crs)
         if not layer.isValid():
@@ -359,7 +376,7 @@ class SurvexImport:
             self.dlg.GPKGSelector.clicked.connect(self.select_gpkg)
             self.dlg.CRSFromProject.setChecked(False)
             self.dlg.CRSFromFile.clicked.connect(self.crs_from_file)
-            self.dlg.CRSFromFile.setChecked(False)
+            self.dlg.CRSFromFile.setChecked(True)
             self.dlg.CRSFromProject.clicked.connect(self.crs_from_project)
             self.dlg.ImportAll.clicked.connect(self.toggle_import_all)
             self.dlg.Legs.clicked.connect(self.all_checked)
@@ -564,7 +581,7 @@ class SurvexImport:
 
             if include_stations and self.station_list: # station layer
 
-                station_layer = self.add_layer('stations', 'PointZ')
+                station_layer = self.add_layer('stations', 'PointZ', survex_3d)
 
                 attrs = [QgsField(self.station_attr[k], QVariant.Int) for k in self.station_flags]
                 attrs.insert(0, QgsField('ELEVATION', QVariant.Double))
@@ -590,7 +607,7 @@ class SurvexImport:
 
             if include_legs and self.leg_list: # leg layer
 
-                leg_layer = self.add_layer('legs', 'LineStringZ')
+                leg_layer = self.add_layer('legs', 'LineStringZ', survex_3d)
 
                 attrs = [QgsField(self.leg_attr[k], QVariant.Int) for k in self.leg_flags]
                 if nlehv:
@@ -774,21 +791,21 @@ class SurvexImport:
                 attrs = [QgsField('ELEVATION', QVariant.Double)] # common to all
 
                 if include_traverses and trav_features: # traverse layer
-                    travs_layer = self.add_layer('traverses', 'LineStringZ')
+                    travs_layer = self.add_layer('traverses', 'LineStringZ', survex_3d)
                     travs_layer.dataProvider().addAttributes(attrs)
                     travs_layer.updateFields()
                     travs_layer.dataProvider().addFeatures(trav_features)
                     layers.append(travs_layer)
 
                 if include_xsections and xsect_features: # xsection layer
-                    xsects_layer = self.add_layer('xsections', 'LineStringZ')
+                    xsects_layer = self.add_layer('xsections', 'LineStringZ', survex_3d)
                     xsects_layer.dataProvider().addAttributes(attrs)
                     xsects_layer.updateFields()
                     xsects_layer.dataProvider().addFeatures(xsect_features)
                     layers.append(xsects_layer)
 
                 if include_walls and wall_features: # wall layer
-                    walls_layer = self.add_layer('walls', 'LineStringZ')
+                    walls_layer = self.add_layer('walls', 'LineStringZ', survex_3d)
                     walls_layer.dataProvider().addAttributes(attrs)
                     walls_layer.updateFields()
                     walls_layer.dataProvider().addFeatures(wall_features)
@@ -798,7 +815,7 @@ class SurvexImport:
                     attrs += [QgsField(s, QVariant.Double) for s in ('MEAN_UP', 'MEAN_DOWN')]
 
                 if include_polygons and quad_features: # polygon layer
-                    quads_layer = self.add_layer('polygons', 'PolygonZ')
+                    quads_layer = self.add_layer('polygons', 'PolygonZ', survex_3d)
                     quads_layer.dataProvider().addAttributes(attrs)
                     quads_layer.updateFields()
                     quads_layer.dataProvider().addFeatures(quad_features)
