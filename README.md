@@ -363,13 +363,13 @@ custom CRS beforehand, as described next.
 
 ### Magnetic declination
 
-This is potentially a large subject, and one can again refer to the
-survex documentation for more details.  The modern approach, which
-fits with the recommended use pattern for the `.3d` file importer, is
-to use a `*declination auto` command with a position representative of
-the cave survey data, and appropriate `*date` commands to reflect the
-dates at which the compass bearings were taken.  There are a few
-'gotchas' though:
+This is another potentially a large subject, and one can again refer
+to the survex documentation for more details.  The modern approach,
+which fits with the recommended use pattern for the `.3d` file
+importer, is to use a `*declination auto` command with a position
+representative of the cave survey data, and appropriate `*date`
+commands to reflect the dates at which the compass bearings were
+taken.  There are a few 'gotchas' though:
 
 * `*declination auto` should come _after_ the `*cs` and `*cs out`
 commands in order that survex knows which input CRS is being used to
