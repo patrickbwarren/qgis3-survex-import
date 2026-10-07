@@ -23,9 +23,10 @@
 """
 
 import os
-
+from pathlib import Path
 from PyQt5 import uic
 from PyQt5 import QtWidgets
+
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -42,3 +43,11 @@ class SurvexImportDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.title.setText( "QGIS3 survex .3d import (version {})".format(self.metadata_version()))
+        
+    def metadata_version(self):
+        metadata_file = os.path.join(Path(__file__).parent, 'metadata.txt')
+        with open(metadata_file, 'r') as file:
+            for line in file:
+                if line.startswith("version="):
+                    return line.split('=')[1].strip()  # Return the version number
